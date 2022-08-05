@@ -140,7 +140,7 @@ CREATE TABLE `driverdetail` (
   `id` int NOT NULL AUTO_INCREMENT,
   `trip_id` int DEFAULT NULL,
   `user_id_driver` int DEFAULT NULL,
-  `role` enum('Assistant','Driver','MainDriver') NOT NULL,
+  `driverrole` enum('Assistant','Driver','MainDriver') NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_driver_trip_idx` (`trip_id`,`user_id_driver`),
   KEY `fk_driver_driverdetail_idx` (`user_id_driver`),
@@ -230,6 +230,7 @@ CREATE TABLE `route` (
   `startingpoint` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `destination` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `price` decimal(10,0) NOT NULL,
+  `specialprice` decimal(10,0) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -240,7 +241,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'HCM-BĐ','Tp HCM','BĐ',300),(2,'HCM-PY','Tp HCM','PY',250),(3,'PY-HCM','PY','Tp HCM',250),(4,'BĐ-HCM','BĐ','Tp HCM',300);
+INSERT INTO `route` VALUES (1,'HCM-BĐ','Tp HCM','BĐ',300,NULL),(2,'HCM-PY','Tp HCM','PY',250,NULL),(3,'PY-HCM','PY','Tp HCM',250,NULL),(4,'BĐ-HCM','BĐ','Tp HCM',300,NULL);
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -360,7 +361,7 @@ CREATE TABLE `user` (
   `phone` int DEFAULT NULL,
   `avatar` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint(1) DEFAULT '1',
-  `userrole` enum('Customer','Admin','Employee','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `userrole` enum('Customer','Admin','Employee','Driver') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'Customer',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -385,4 +386,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-03 23:51:41
+-- Dump completed on 2022-08-04 14:44:11

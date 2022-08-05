@@ -5,19 +5,17 @@
  */
 package com.qldv.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  *
  * @author ASUS
  */
 @Controller
-public class IndexController {
-    @Autowired
-    @RequestMapping ("/")
-    public String index() {
-        return "index";
+public class UserController {
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 }
