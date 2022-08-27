@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qldv.service.impl;
+package com.qldv.service;
+
+import com.qldv.pojo.Passengercar;
+import java.util.List;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
-public class TicketDetaiServiceImpl {
-    
+public interface PassengerService {
+
+    List<Passengercar> getPassengercars(String kw);
 }

@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "passengercar")
@@ -62,13 +61,11 @@ public class Passengercar implements Serializable {
     private int seats;
     @OneToMany(mappedBy = "passengercarId")
     private Set<Trip> tripSet;
-    @OneToMany(mappedBy = "passengercar")
+    @OneToMany(mappedBy = "passengercarId")
     private Set<Ticketdetail> ticketdetailSet;
-    @JoinColumns({
-        @JoinColumn(name = "category_id", referencedColumnName = "id"),
-        @JoinColumn(name = "category_id", referencedColumnName = "id")})
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
-    private Category category;
+    private Category categoryId;
 
     public Passengercar() {
     }
@@ -134,12 +131,12 @@ public class Passengercar implements Serializable {
         this.ticketdetailSet = ticketdetailSet;
     }
 
-    public Category getCategory() {
-        return category;
+    public Category getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(Category categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override

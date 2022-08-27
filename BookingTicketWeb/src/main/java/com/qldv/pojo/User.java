@@ -5,7 +5,9 @@
  */
 package com.qldv.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -17,15 +19,19 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "user")
@@ -43,6 +49,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByUserrole", query = "SELECT u FROM User u WHERE u.userrole = :userrole")})
 public class User implements Serializable {
 
+    public static final String EMPLOYEE = "Employee";
+    public static final String ADMIN = "Admin";
+    public static final String CUSTOMER = "Customer";
+    public static final String DRIVER = "Driver";
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,44 +62,57 @@ public class User implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 30, message = "{user.name.error.sizeMsg}")
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 30, message = "{user.username.error.sizeMsg}")
     @Column(name = "username")
     private String username;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
+    //@NotEmpty(
+    @Size(min = 1, max = 100, message = "{user.password.sizeMsg}")
     @Column(name = "password")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 20)
+    @Transient
+    @JsonIgnore
+    private String confirmPassword;
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "{user.email.error.invalidMsg}")
+    @Size(max = 100)
     @Column(name = "email")
     private String email;
+    @Pattern(regexp = "\\d{10}", message = "{user.phone.error.invalidMsg}")
+    @Size(max = 11)
     @Column(name = "phone")
-    private Integer phone;
+    private String phone;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 150, message = "{user.avatar.error.sizeMsg}")
     @Column(name = "avatar")
     private String avatar;
+    @Transient
+    @JsonIgnore
+    private MultipartFile avt;
     @Column(name = "active")
     private Boolean active;
     @Size(max = 8)
     @Column(name = "userrole")
     private String userrole;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Driver> driverSet;
-    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Driver driver;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerId")
     private Set<Comment> commentSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Employee> employeeSet;
-    @OneToMany(mappedBy = "user")
-    private Set<Bookingticket> bookingticketSet;
-
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Employee employee;
+    @JsonIgnore
+    @OneToMany(mappedBy = "userId")
+    private Set<Ticketdetail> ticketdetailSet;
+    
     public User() {
     }
 
@@ -96,12 +120,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String name, String username, String password, String avatar) {
+    public User(Integer id, String name, String username, String password) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.password = password;
-        this.avatar = avatar;
     }
 
     public Integer getId() {
@@ -144,11 +167,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -176,13 +199,12 @@ public class User implements Serializable {
         this.userrole = userrole;
     }
 
-    @XmlTransient
-    public Set<Driver> getDriverSet() {
-        return driverSet;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setDriverSet(Set<Driver> driverSet) {
-        this.driverSet = driverSet;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     @XmlTransient
@@ -194,22 +216,21 @@ public class User implements Serializable {
         this.commentSet = commentSet;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
     @XmlTransient
-    public Set<Employee> getEmployeeSet() {
-        return employeeSet;
+    public Set<Ticketdetail> getTicketdetailSet() {
+        return ticketdetailSet;
     }
 
-    public void setEmployeeSet(Set<Employee> employeeSet) {
-        this.employeeSet = employeeSet;
-    }
-
-    @XmlTransient
-    public Set<Bookingticket> getBookingticketSet() {
-        return bookingticketSet;
-    }
-
-    public void setBookingticketSet(Set<Bookingticket> bookingticketSet) {
-        this.bookingticketSet = bookingticketSet;
+    public void setTicketdetailSet(Set<Ticketdetail> ticketdetailSet) {
+        this.ticketdetailSet = ticketdetailSet;
     }
 
     @Override
@@ -236,5 +257,35 @@ public class User implements Serializable {
     public String toString() {
         return "com.qldv.pojo.User[ id=" + id + " ]";
     }
+
+    /**
+     * @return the confirmPassword
+     */
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    /**
+     * @param confirmPassword the confirmPassword to set
+     */
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    /**
+     * @return the avt
+     */
+    public MultipartFile getAvt() {
+        return avt;
+    }
+
+    /**
+     * @param avt the avt to set
+     */
+    public void setAvt(MultipartFile avt) {
+        this.avt = avt;
+    }
+
     
+
 }

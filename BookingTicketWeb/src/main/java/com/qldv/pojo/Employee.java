@@ -13,11 +13,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "employee")
@@ -67,12 +66,10 @@ public class Employee implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "gender")
     private String gender;
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "userIdEmployee")
     private Set<Trip> tripSet;
-    @JoinColumns({
-        @JoinColumn(name = "user_id_employee", referencedColumnName = "id", insertable = false, updatable = false),
-        @JoinColumn(name = "user_id_employee", referencedColumnName = "id", insertable = false, updatable = false)})
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id_employee", referencedColumnName = "id", insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private User user;
 
     public Employee() {

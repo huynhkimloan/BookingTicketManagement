@@ -6,10 +6,12 @@
 package com.qldv.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,14 +19,16 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "route")
@@ -35,7 +39,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Route.findByRoutename", query = "SELECT r FROM Route r WHERE r.routename = :routename"),
     @NamedQuery(name = "Route.findByStartingpoint", query = "SELECT r FROM Route r WHERE r.startingpoint = :startingpoint"),
     @NamedQuery(name = "Route.findByDestination", query = "SELECT r FROM Route r WHERE r.destination = :destination"),
-    @NamedQuery(name = "Route.findByPrice", query = "SELECT r FROM Route r WHERE r.price = :price")})
+    @NamedQuery(name = "Route.findByPrice", query = "SELECT r FROM Route r WHERE r.price = :price"),
+    @NamedQuery(name = "Route.findBySpecialprice", query = "SELECT r FROM Route r WHERE r.specialprice = :specialprice"),
+    @NamedQuery(name = "Route.findByImage", query = "SELECT r FROM Route r WHERE r.image = :image")})
 public class Route implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,8 +69,18 @@ public class Route implements Serializable {
     @NotNull
     @Column(name = "price")
     private long price;
-    @OneToMany(mappedBy = "route")
-    private Set<Trip> tripSet;
+    @Column(name = "specialprice")
+    private Long specialprice;
+    @Size(max = 150)
+    @Column(name = "image")
+    private String image;
+//    @OneToMany(mappedBy = "routeId")
+//    private Set<Trip> tripSet;
+    @OneToMany(mappedBy = "routeId", fetch = FetchType.LAZY)
+    private List<Trip> trips;
+
+    @Transient
+    private MultipartFile file;
 
     public Route() {
     }
@@ -121,14 +137,30 @@ public class Route implements Serializable {
         this.price = price;
     }
 
-    @XmlTransient
-    public Set<Trip> getTripSet() {
-        return tripSet;
+    public Long getSpecialprice() {
+        return specialprice;
     }
 
-    public void setTripSet(Set<Trip> tripSet) {
-        this.tripSet = tripSet;
+    public void setSpecialprice(Long specialprice) {
+        this.specialprice = specialprice;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+//    @XmlTransient
+//    public Set<Trip> getTripSet() {
+//        return tripSet;
+//    }
+//
+//    public void setTripSet(Set<Trip> tripSet) {
+//        this.tripSet = tripSet;
+//    }
 
     @Override
     public int hashCode() {
@@ -154,5 +186,33 @@ public class Route implements Serializable {
     public String toString() {
         return "com.qldv.pojo.Route[ id=" + id + " ]";
     }
-    
+
+    /**
+     * @return the trips
+     */
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    /**
+     * @param trips the trips to set
+     */
+    public void setTrips(List<Trip> trips) {
+        this.trips = trips;
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
 }

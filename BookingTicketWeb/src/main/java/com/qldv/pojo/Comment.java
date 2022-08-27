@@ -5,6 +5,7 @@
  */
 package com.qldv.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -14,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "comment")
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
     @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id"),
     @NamedQuery(name = "Comment.findByContent", query = "SELECT c FROM Comment c WHERE c.content = :content"),
-    @NamedQuery(name = "Comment.findByCreatedate", query = "SELECT c FROM Comment c WHERE c.createdate = :createdate")})
+    @NamedQuery(name = "Comment.findByCreateddate", query = "SELECT c FROM Comment c WHERE c.createddate = :createddate")})
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,24 +45,22 @@ public class Comment implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 100)
+    @Size(max = 500)
     @Column(name = "content")
     private String content;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "createdate")
+    @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdate;
-    @JoinColumns({
-        @JoinColumn(name = "trip_id", referencedColumnName = "id"),
-        @JoinColumn(name = "trip_id", referencedColumnName = "id")})
-    @ManyToOne
-    private Trip trip;
-    @JoinColumns({
-        @JoinColumn(name = "user_id", referencedColumnName = "id"),
-        @JoinColumn(name = "user_id", referencedColumnName = "id")})
-    @ManyToOne
-    private User user;
+    private Date createddate;
+    @JoinColumn(name = "trip_id", referencedColumnName = "id")
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    private Trip tripId;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @JsonIgnore
+    @ManyToOne(optional = false)
+    private User customerId;
 
     public Comment() {
     }
@@ -71,9 +69,9 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public Comment(Integer id, Date createdate) {
+    public Comment(Integer id, Date createddate) {
         this.id = id;
-        this.createdate = createdate;
+        this.createddate = createddate;
     }
 
     public Integer getId() {
@@ -92,28 +90,28 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-    public Date getCreatedate() {
-        return createdate;
+    public Date getCreateddate() {
+        return createddate;
     }
 
-    public void setCreatedate(Date createdate) {
-        this.createdate = createdate;
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
     }
 
-    public Trip getTrip() {
-        return trip;
+    public Trip getTripId() {
+        return tripId;
     }
 
-    public void setTrip(Trip trip) {
-        this.trip = trip;
+    public void setTripId(Trip tripId) {
+        this.tripId = tripId;
     }
 
-    public User getUser() {
-        return user;
+    public User getCustomerId() {
+        return customerId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomerId(User customerId) {
+        this.customerId = customerId;
     }
 
     @Override

@@ -5,10 +5,27 @@
  */
 package com.qldv.repository;
 
+import com.qldv.pojo.Seat;
+import com.qldv.pojo.Ticketdetail;
+import com.qldv.pojo.User;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
- * @author ASUS
+ * @author Admin
  */
-public class TicketDetailRepository {
+public interface TicketDetailRepository {
+
+    boolean deleteTicketDetail(int tripId);
+
+    List<Object[]> findTicketsByTripId(int tripId);
     
+    List<Seat> getSeat(String kw);
+    
+    long countSeat(String kw);
+    
+    Object getUsers(String uname);
+    
+    boolean addReceipt(Map<Integer, Seat> seat,int uId, String method);
 }

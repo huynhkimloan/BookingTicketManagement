@@ -5,10 +5,24 @@
  */
 package com.qldv.service;
 
+import com.qldv.pojo.Seat;
+import com.qldv.pojo.User;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
- * @author ASUS
+ * @author Admin
  */
-public class TicketDetailService {
-    
+public interface TicketDetailService {
+
+    List<Object[]> findTicketsByTripId(int tripId);
+
+    List<Seat> getSeat(String kw);
+
+    long countSeat(String kw);
+
+    Object getUsers(String uname);
+
+    boolean addReceipt(Map<Integer, Seat> seat, int uId, String method);
 }

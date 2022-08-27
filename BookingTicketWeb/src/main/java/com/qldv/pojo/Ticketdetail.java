@@ -6,6 +6,7 @@
 package com.qldv.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,18 +14,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "ticketdetail")
@@ -32,10 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Ticketdetail.findAll", query = "SELECT t FROM Ticketdetail t"),
     @NamedQuery(name = "Ticketdetail.findById", query = "SELECT t FROM Ticketdetail t WHERE t.id = :id"),
-    @NamedQuery(name = "Ticketdetail.findBySeatposition", query = "SELECT t FROM Ticketdetail t WHERE t.seatposition = :seatposition"),
     @NamedQuery(name = "Ticketdetail.findByPaymentmethod", query = "SELECT t FROM Ticketdetail t WHERE t.paymentmethod = :paymentmethod"),
     @NamedQuery(name = "Ticketdetail.findByTotalprice", query = "SELECT t FROM Ticketdetail t WHERE t.totalprice = :totalprice"),
-    @NamedQuery(name = "Ticketdetail.findByActive", query = "SELECT t FROM Ticketdetail t WHERE t.active = :active")})
+    @NamedQuery(name = "Ticketdetail.findByCreateddate", query = "SELECT t FROM Ticketdetail t WHERE t.createddate = :createddate")})
 public class Ticketdetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,11 +47,6 @@ public class Ticketdetail implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "seatposition")
-    private String seatposition;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "paymentmethod")
     private String paymentmethod;
@@ -58,23 +54,23 @@ public class Ticketdetail implements Serializable {
     @NotNull
     @Column(name = "totalprice")
     private long totalprice;
-    @Column(name = "active")
-    private Boolean active;
-    @JoinColumns({
-        @JoinColumn(name = "bookingticket_id", referencedColumnName = "id"),
-        @JoinColumn(name = "bookingticket_id", referencedColumnName = "id")})
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "createddate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createddate;
+    @JoinColumn(name = "passengercar_id", referencedColumnName = "id")
     @ManyToOne
-    private Bookingticket bookingticket;
-    @JoinColumns({
-        @JoinColumn(name = "passengercar_id", referencedColumnName = "id"),
-        @JoinColumn(name = "passengercar_id", referencedColumnName = "id")})
+    private Passengercar passengercarId;
+    @JoinColumn(name = "seat_id", referencedColumnName = "id")
     @ManyToOne
-    private Passengercar passengercar;
-    @JoinColumns({
-        @JoinColumn(name = "trip_id", referencedColumnName = "id"),
-        @JoinColumn(name = "trip_id", referencedColumnName = "id")})
+    private Seat seatId;
+    @JoinColumn(name = "trip_id", referencedColumnName = "id")
     @ManyToOne
-    private Trip trip;
+    private Trip tripId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    private User userId;
 
     public Ticketdetail() {
     }
@@ -83,11 +79,11 @@ public class Ticketdetail implements Serializable {
         this.id = id;
     }
 
-    public Ticketdetail(Integer id, String seatposition, String paymentmethod, long totalprice) {
+    public Ticketdetail(Integer id, String paymentmethod, long totalprice, Date createddate) {
         this.id = id;
-        this.seatposition = seatposition;
         this.paymentmethod = paymentmethod;
         this.totalprice = totalprice;
+        this.createddate = createddate;
     }
 
     public Integer getId() {
@@ -96,14 +92,6 @@ public class Ticketdetail implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getSeatposition() {
-        return seatposition;
-    }
-
-    public void setSeatposition(String seatposition) {
-        this.seatposition = seatposition;
     }
 
     public String getPaymentmethod() {
@@ -122,36 +110,44 @@ public class Ticketdetail implements Serializable {
         this.totalprice = totalprice;
     }
 
-    public Boolean getActive() {
-        return active;
+    public Date getCreateddate() {
+        return createddate;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setCreateddate(Date createddate) {
+        this.createddate = createddate;
     }
 
-    public Bookingticket getBookingticket() {
-        return bookingticket;
+    public Passengercar getPassengercarId() {
+        return passengercarId;
     }
 
-    public void setBookingticket(Bookingticket bookingticket) {
-        this.bookingticket = bookingticket;
+    public void setPassengercarId(Passengercar passengercarId) {
+        this.passengercarId = passengercarId;
     }
 
-    public Passengercar getPassengercar() {
-        return passengercar;
+    public Seat getSeatId() {
+        return seatId;
     }
 
-    public void setPassengercar(Passengercar passengercar) {
-        this.passengercar = passengercar;
+    public void setSeatId(Seat seatId) {
+        this.seatId = seatId;
     }
 
-    public Trip getTrip() {
-        return trip;
+    public Trip getTripId() {
+        return tripId;
     }
 
-    public void setTrip(Trip trip) {
-        this.trip = trip;
+    public void setTripId(Trip tripId) {
+        this.tripId = tripId;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override

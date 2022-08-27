@@ -9,13 +9,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -23,14 +24,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author ASUS
+ * @author Admin
  */
 @Entity
 @Table(name = "trip")
@@ -42,7 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Trip.findByDepartureday", query = "SELECT t FROM Trip t WHERE t.departureday = :departureday"),
     @NamedQuery(name = "Trip.findByDeparturetime", query = "SELECT t FROM Trip t WHERE t.departuretime = :departuretime"),
     @NamedQuery(name = "Trip.findByArrivaltime", query = "SELECT t FROM Trip t WHERE t.arrivaltime = :arrivaltime"),
-    @NamedQuery(name = "Trip.findByEmptyseat", query = "SELECT t FROM Trip t WHERE t.emptyseat = :emptyseat"),
+    @NamedQuery(name = "Trip.findByImage", query = "SELECT t FROM Trip t WHERE t.image = :image"),
     @NamedQuery(name = "Trip.findByActive", query = "SELECT t FROM Trip t WHERE t.active = :active")})
 public class Trip implements Serializable {
 
@@ -72,32 +75,29 @@ public class Trip implements Serializable {
     @Column(name = "arrivaltime")
     @Temporal(TemporalType.TIME)
     private Date arrivaltime;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "emptyseat")
-    private int emptyseat;
+    @Size(max = 150)
+    @Column(name = "image")
+    private String image;
     @Column(name = "active")
     private Boolean active;
-    @JoinColumn(name = "user_id_driver", referencedColumnName = "user_id_driver")
+    @JoinColumn(name = "user_id_employee", referencedColumnName = "user_id_employee")
     @ManyToOne
-    private Driver userIdDriver;
-    @JoinColumns({
-        @JoinColumn(name = "user_id_employee", referencedColumnName = "user_id_employee"),
-        @JoinColumn(name = "user_id_employee", referencedColumnName = "user_id_employee")})
-    @ManyToOne
-    private Employee employee;
+    private Employee userIdEmployee;
     @JoinColumn(name = "passengercar_id", referencedColumnName = "id")
     @ManyToOne
     private Passengercar passengercarId;
-    @JoinColumns({
-        @JoinColumn(name = "route_id", referencedColumnName = "id"),
-        @JoinColumn(name = "route_id", referencedColumnName = "id")})
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
     @ManyToOne
-    private Route route;
-    @OneToMany(mappedBy = "trip")
+    private Route routeId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripId")
+    private Set<Driverdetail> driverdetailSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripId", fetch = FetchType.EAGER)
     private Set<Comment> commentSet;
-    @OneToMany(mappedBy = "trip")
+    @OneToMany(mappedBy = "tripId")
     private Set<Ticketdetail> ticketdetailSet;
+    
+    @Transient
+    private MultipartFile file;
 
     public Trip() {
     }
@@ -106,13 +106,12 @@ public class Trip implements Serializable {
         this.id = id;
     }
 
-    public Trip(Integer id, String coachname, Date departureday, Date departuretime, Date arrivaltime, int emptyseat) {
+    public Trip(Integer id, String coachname, Date departureday, Date departuretime, Date arrivaltime) {
         this.id = id;
         this.coachname = coachname;
         this.departureday = departureday;
         this.departuretime = departuretime;
         this.arrivaltime = arrivaltime;
-        this.emptyseat = emptyseat;
     }
 
     public Integer getId() {
@@ -155,12 +154,12 @@ public class Trip implements Serializable {
         this.arrivaltime = arrivaltime;
     }
 
-    public int getEmptyseat() {
-        return emptyseat;
+    public String getImage() {
+        return image;
     }
 
-    public void setEmptyseat(int emptyseat) {
-        this.emptyseat = emptyseat;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Boolean getActive() {
@@ -171,20 +170,12 @@ public class Trip implements Serializable {
         this.active = active;
     }
 
-    public Driver getUserIdDriver() {
-        return userIdDriver;
+    public Employee getUserIdEmployee() {
+        return userIdEmployee;
     }
 
-    public void setUserIdDriver(Driver userIdDriver) {
-        this.userIdDriver = userIdDriver;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setUserIdEmployee(Employee userIdEmployee) {
+        this.userIdEmployee = userIdEmployee;
     }
 
     public Passengercar getPassengercarId() {
@@ -195,12 +186,21 @@ public class Trip implements Serializable {
         this.passengercarId = passengercarId;
     }
 
-    public Route getRoute() {
-        return route;
+    public Route getRouteId() {
+        return routeId;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setRouteId(Route routeId) {
+        this.routeId = routeId;
+    }
+
+    @XmlTransient
+    public Set<Driverdetail> getDriverdetailSet() {
+        return driverdetailSet;
+    }
+
+    public void setDriverdetailSet(Set<Driverdetail> driverdetailSet) {
+        this.driverdetailSet = driverdetailSet;
     }
 
     @XmlTransient
@@ -244,6 +244,20 @@ public class Trip implements Serializable {
     @Override
     public String toString() {
         return "com.qldv.pojo.Trip[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
     
 }
