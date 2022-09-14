@@ -38,7 +38,7 @@ public class ApiBookingController {
     @Autowired
     private UserService userDetailService;
 
-    @PostMapping("/api/reservation")
+     @PostMapping("/api/reservation")
     public int addTicketDetail(@RequestBody Seat params, HttpSession session) {
         Map<Integer, Seat> seat = (Map<Integer, Seat>) session.getAttribute("seat");
         if (seat == null) {
@@ -71,10 +71,11 @@ public class ApiBookingController {
     }
 
     @PostMapping(value = "/api/pay")
-    public HttpStatus pay(HttpSession session, HttpServletRequest request, Authentication au) {
+    public HttpStatus pay(HttpSession session, @RequestBody Map<String, String> params,
+            HttpServletRequest request, Authentication au) {
         User u = this.userDetailService.getUsers(au.getName()).get(0);
 
-        String method = "Tiền mặt";
+        String method = params.get("method");
 
         if (this.ticketDetailService.addReceipt((Map<Integer, Seat>) session.getAttribute("seat"), u.getId(), method) == true) {
             session.removeAttribute("seat");
@@ -83,4 +84,19 @@ public class ApiBookingController {
 
         return HttpStatus.BAD_REQUEST;
     }
+    
+//    @PostMapping(value = "/api/pay")
+//    public HttpStatus payMomo(HttpSession session, @RequestBody Map<String, String> params,
+//            HttpServletRequest request, Authentication au) {
+//        User u = this.userDetailService.getUsers(au.getName()).get(0);
+//
+//        String method = params.get("method");
+//
+//        if (this.ticketDetailService.addReceipt((Map<Integer, Seat>) session.getAttribute("seat"), u.getId(), method) == true) {
+//            session.removeAttribute("seat");
+//            return HttpStatus.OK;
+//        }
+//
+//        return HttpStatus.BAD_REQUEST;
+//    }
 }

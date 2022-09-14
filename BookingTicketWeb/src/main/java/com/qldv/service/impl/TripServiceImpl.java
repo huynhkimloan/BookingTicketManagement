@@ -56,18 +56,9 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public boolean addTrip(Trip t) {
-        try {
-            Map m = this.cloudinary.uploader().upload(t.getFile(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            t.setImage((String) m.get("secure_url"));
-
-            return this.tripRepository.addTrip(t);
-        } catch (IOException ex) {
-
-            ex.printStackTrace();
-        }
-        return false;
+    public Trip addTrip(Trip t) {
+        t.setActive(Boolean.TRUE);
+        return this.tripRepository.addTrip(t);
     }
 
     @Override
@@ -105,6 +96,11 @@ public class TripServiceImpl implements TripService {
     @Override
     public Route getRouteByTrip(int id) {
         return this.tripRepository.getRouteByTrip(id);
+    }
+
+    @Override
+    public List<Trip> getTrips() {
+        return this.tripRepository.getTrips();
     }
 
 }

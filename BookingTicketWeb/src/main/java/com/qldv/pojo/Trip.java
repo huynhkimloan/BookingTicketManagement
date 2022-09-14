@@ -93,7 +93,7 @@ public class Trip implements Serializable {
     private Set<Driverdetail> driverdetailSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripId", fetch = FetchType.EAGER)
     private Set<Comment> commentSet;
-    @OneToMany(mappedBy = "tripId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tripId")
     private Set<Ticketdetail> ticketdetailSet;
     
     @Transient

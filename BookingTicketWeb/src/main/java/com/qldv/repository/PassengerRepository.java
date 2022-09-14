@@ -17,4 +17,8 @@ public interface PassengerRepository {
     Passengercar getById(int id);
 
     List<Passengercar> getPassengercars(String kw);
+    
+    int totalItem();
+    
+    int getNumberSeat(int tripId);
 }

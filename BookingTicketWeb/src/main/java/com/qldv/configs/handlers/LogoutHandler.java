@@ -22,7 +22,7 @@ public class LogoutHandler implements LogoutSuccessHandler{
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication a) throws IOException, ServletException {
         request.getSession().removeAttribute("currentUser");
-        response.sendRedirect("/BookingTicketWeb/login");
+        response.sendRedirect("/BookingTicketWeb");
     }
     
     

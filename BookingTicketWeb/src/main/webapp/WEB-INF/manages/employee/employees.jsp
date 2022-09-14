@@ -89,24 +89,17 @@
 
 <nav aria-label="Page navigation example" style="float: right">
     <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
         <c:forEach var="i" begin="0" end="${totalItem}">
             <c:url value="/admin/employees/list/${i+1}" var="action" />
             <li class="page-item"><a class="page-link" href="${action}"><c:out value="${i+1}"/></a></li>
-            </c:forEach>
-        <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
+        </c:forEach>
     </ul>
 </nav>
 <script>
     function showMess(id) {
         var option = confirm('Bạn có chắc chắn muốn xóa không?');
         if (option === true)
-            window.location.href = '/BookingTicketWeb/admin/employees/deleteemployee/' + id;
+            alert('Vì nhân viên liên quan đến nhiều trường dữ liệu khác nhau => KHÔNG được phép xóa!\n\
+                                        VUI LÒNG QUAY LẠI!');
     }
 </script>

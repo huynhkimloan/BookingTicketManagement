@@ -128,17 +128,68 @@ public class UserRepositoryImpl implements UserRepository {
             session.save(user);
 
             return user;
-        } catch(HibernateException ex) {
+        } catch (HibernateException ex) {
             ex.printStackTrace();
         }
-        
+
         return null;
     }
 
     @Override
     public User getById(int id) {
-         Session session = this.sessionFactory.getObject().getCurrentSession();
+        Session session = this.sessionFactory.getObject().getCurrentSession();
         return session.get(User.class, id);
+    }
+
+    @Override
+    public boolean editUser(User u) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        try {
+            session.update(u);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public int totalItem(String kw) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            Query q = session.createQuery("SELECT count(*) FROM User WHERE userrole =: kw");
+            q.setParameter("kw", kw);
+            return Integer.parseInt(q.getSingleResult().toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public List<User> getUserName() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        Root root = query.from(User.class);
+        query = query.select(root.get("username"));
+
+        Query q = session.createQuery(query);
+        return q.getResultList();
+    }
+
+    @Override
+    public String getPassById(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        Root root = query.from(User.class);
+        query.select(root.get("password"));
+        query = query.where(builder.equal(root.get("id"), id));
+
+        Query q = session.createQuery(query);
+        return q.getSingleResult().toString();
     }
 
 }

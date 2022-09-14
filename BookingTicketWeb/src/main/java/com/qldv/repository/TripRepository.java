@@ -24,13 +24,15 @@ public interface TripRepository {
 
     List<Trip> getTrips(String kw);
 
+    List<Trip> getTrips();
+
     List<Trip> getTrips(Map<String, String> params, int start, int limit);
 
     List<Trip> getListNav(int start, int limit);
-    
+
     Route getRouteByTrip(int id);
 
-    boolean addTrip(Trip t);
+    Trip addTrip(Trip t);
 
     boolean editTrip(Trip t);
 

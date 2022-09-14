@@ -5,10 +5,15 @@
  */
 package com.qldv.repository.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.qldv.pojo.Passengercar;
 import com.qldv.pojo.Route;
 import com.qldv.pojo.Trip;
+import com.qldv.pojo.User;
 import com.qldv.repository.RouteRepository;
 import com.qldv.repository.TripRepository;
+import java.io.IOException;
 import java.util.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -39,6 +44,9 @@ public class TripRepositoryImpl implements TripRepository {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public List<Trip> getDeparturedayTrips(Date kw, int id) {
@@ -84,12 +92,11 @@ public class TripRepositoryImpl implements TripRepository {
         Root root = query.from(Trip.class);
         query = query.select(root);
 
-        if (kw != null && !kw.isEmpty()) {
-            Predicate p1 = builder.like(root.get("seatrow").as(String.class),
-                    String.format("%%%s%%", kw));
-            query = query.where(p1);
-        }
-
+//        if (kw != null && !kw.isEmpty()) {
+//            Predicate p1 = builder.like(root.get("seatrow").as(String.class),
+//                    String.format("%%%s%%", kw));
+//            query = query.where(p1);
+//        }
         Query q = session.createQuery(query);
         return q.getResultList();
     }
@@ -100,18 +107,26 @@ public class TripRepositoryImpl implements TripRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Trip> query = builder.createQuery(Trip.class);
         Root root = query.from(Trip.class);
+        Root rootU = query.from(User.class);
+        Root rootR = query.from(Route.class);
+        Root rootP = query.from(Passengercar.class);
         query = query.select(root);
-
+        Predicate p = builder.equal(root.get("userIdEmployee"), rootU.get("id"));
+        Predicate pp = builder.equal(root.get("routeId"), rootR.get("id"));
+        Predicate ppp = builder.equal(root.get("passengercarId"), rootP.get("id"));
+        
         if (params != null) {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
                 Predicate p1 = builder.like(root.get("coachname").as(String.class),
                         String.format("%%%s%%", kw));
-//                Predicate p2 = builder.like(root.get("destination").as(String.class),
-//                        String.format("%%%s%%", kw));
-//                Predicate p3 = builder.like(root.get("routename").as(String.class),
-//                        String.format("%%%s%%", kw));
-                query = query.where(p1);
+                Predicate p2 = builder.like(rootU.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p3 = builder.like(rootR.get("routename").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p4 = builder.like(rootP.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                query = query.where(builder.or(p1, p2, p3, p4), builder.and(p, pp, ppp));
             }
         }
 
@@ -136,15 +151,16 @@ public class TripRepositoryImpl implements TripRepository {
     }
 
     @Override
-    public boolean addTrip(Trip t) {
+    public Trip addTrip(Trip t) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         try {
             session.save(t);
-            return true;
+            return t;
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
         }
+        return null;
     }
 
     @Override
@@ -205,6 +221,19 @@ public class TripRepositoryImpl implements TripRepository {
         }
 
         return r;
+    }
+
+    @Override
+    public List<Trip> getTrips() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Trip> query = builder.createQuery(Trip.class);
+        Root root = query.from(Trip.class);
+        query = query.select(root);
+        query = query.where(builder.equal(root.get("active"), 1));
+
+        Query q = session.createQuery(query);
+        return q.getResultList();
     }
 
 }

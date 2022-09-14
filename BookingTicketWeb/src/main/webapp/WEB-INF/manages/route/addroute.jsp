@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
+<h2 class="text-center text-secondary">THÊM TUYẾN XE</h2>
 <c:url value="/admin/routes/saveroute" var="save" />
 <form:form method="post" action="${save}" modelAttribute="route" enctype="multipart/form-data" acceptCharset="UTF-8">
     <div class="mb-3">

@@ -6,7 +6,12 @@
 package com.qldv.controllers;
 
 import com.qldv.pojo.Route;
+import com.qldv.service.DriverDetailService;
+import com.qldv.service.PassengerService;
 import com.qldv.service.RouteService;
+import com.qldv.service.TicketDetailService;
+import com.qldv.service.TripService;
+import com.qldv.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,8 +31,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 public class AdminController {
 
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private TicketDetailService ticketDetailService;
+
+    @Autowired
+    private RouteService routeService;
+    
+    @Autowired
+    private TripService tripService;
+    
+    @Autowired
+    private PassengerService passengerService;
+   
     @RequestMapping("/admin")
     public String admin(Model model) {
+        model.addAttribute("totalRoute",routeService.totalItem());
+        model.addAttribute("totalTrip",tripService.totalItem());
+        model.addAttribute("totalCustomer",userService.totalItem("Customer"));
+        model.addAttribute("totalDriver",userService.totalItem("Driver"));
+        model.addAttribute("totalEmployee",userService.totalItem("Employee"));
+        model.addAttribute("totalAdmin",userService.totalItem("Admin"));
+        model.addAttribute("totalTicket",ticketDetailService.totalItem());
+        model.addAttribute("totalPassenger",passengerService.totalItem());
+        model.addAttribute("totalAmount",ticketDetailService.sumItem());
         return "admin";
     }
 

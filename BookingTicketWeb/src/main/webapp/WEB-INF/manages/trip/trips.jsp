@@ -45,11 +45,12 @@
             <th style="width: 80px">Tên chuyến</th>
             <th style="width: 100px">Ngày khởi hành</th>
             <th style="width: 100px">Giờ khởi hành</th>
-            <th>Giờ đến</th>
+            <th style="width: 100px">Giờ đến</th>
             <th style="width: 40px">Trạng thái</th>
             <th>Tuyến xe</th>
             <th>Nhân viên phụ trách</th> 
-            <th colspan="2" style="width: 20px">Chức năng</th>
+            <th>Xe</th> 
+            <th colspan="3" style="width: 20px">Chức năng</th>
         </tr>
     </thead>
     <tbody>
@@ -70,6 +71,7 @@
                     </c:if>
                 <td>${r.routeId.routename}</td>
                 <td>${r.userIdEmployee.user.name}</td>
+                <td>${r.passengercarId.name}</td>
                 <td>
                     <c:url value="/admin/trips/edittrip/${r.id}" var="edit" />
                     <a href="${edit}"style="color: #7c4c02"
@@ -80,6 +82,11 @@
                     <a href="#" onclick="showMess(${r.id})" style="color: tomato"
                        title="Xóa"><i class="bi bi-trash"></i></a>
                 </td>
+                <td>
+                    <c:url value="/admin/trips/edittrip/image/${r.id}" var="edit" />
+                    <a href="${edit}" style="color: #198754"
+                       title="Sửa" style="margin-right: 5px"><i class="fas fa-file-edit"></i></a>
+                </td>
             </tr>
         </c:forEach>
     </tbody>
@@ -87,27 +94,17 @@
 
 <nav aria-label="Page navigation example" style="float: right">
     <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
         <c:forEach var="i" begin="0" end="${totalItem}">
             <c:url value="/admin/trips/list/${i+1}" var="action" />
             <li class="page-item"><a class="page-link" href="${action}"><c:out value="${i+1}"/></a></li>
             </c:forEach>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
     </ul>
 </nav>
 
 <script>
-    function showMess(id){
+    function showMess(id) {
         var option = confirm('Bạn có chắc chắn muốn xóa không?');
-        if(option === true)
-            window.location.href='/BookingTicketWeb/admin/trips/deletetrip/'+id;
+        if (option === true)
+            window.location.href = '/BookingTicketWeb/admin/trips/deletetrip/' + id;
     }
 </script>

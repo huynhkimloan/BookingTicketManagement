@@ -21,14 +21,22 @@ public interface UserService extends UserDetailsService {
 
     List<User> getUsers(String username);
 
+    List<User> getUserName();
+    
     User getUserByUsername(String username);
+    
+    String getPassById(int userId);
 
     User add(String name, String username, String password, String confirmPassword,
             String email, String phone, String avtUrl);
 
     User addU(User user);
-    
+
     User addUE(User user);
-    
+
     User getById(int userId);
+
+    boolean editUser(User u);
+    
+    int totalItem(String kw);
 }

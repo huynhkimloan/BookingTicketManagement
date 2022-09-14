@@ -9,6 +9,7 @@ import com.qldv.pojo.Driver;
 import com.qldv.pojo.Employee;
 import com.qldv.service.EmployeeService;
 import com.qldv.service.RouteService;
+import com.qldv.service.UserService;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -35,6 +36,9 @@ public class EmployeeManageController {
     
     @Autowired
     private RouteService routeService;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/list")
     public String viewEmployeeList(ModelMap mm) {
@@ -59,20 +63,7 @@ public class EmployeeManageController {
     @GetMapping("/editemployee/{employeeId}")
     public String viewEmployeeEdit(ModelMap mm, @PathVariable("employeeId") int employeeId) {
         mm.addAttribute("employee", employeeService.findById(employeeId));
-        return "updateemployee";
-    }
-
-    @PostMapping("/editemployee")
-    public String doUpdateEmployee(ModelMap mm, @ModelAttribute(value = "employee") Employee employee,
-            BindingResult rs) {
-        if (rs.hasErrors()) {
-            return "updateemployee";
-        }
-
-        if (this.employeeService.editEmployee(employee) == true) {
-            viewEmployeeList(mm);
-            return "redirect:/admin/employees/list";
-        }
+        mm.addAttribute("user", userService.getById(employeeId));
         return "updateemployee";
     }
    

@@ -17,8 +17,6 @@ import org.springframework.format.Formatter;
  * @author Admin
  */
 public class TripFormatter implements Formatter<Trip>{
-    SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy/MM/dd");
-    SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm:ss");
     @Override
     public String print(Trip obj, Locale locale) {
         return String.valueOf(obj.getId());

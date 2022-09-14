@@ -5,6 +5,7 @@
  */
 package com.qldv.repository.impl;
 
+import com.qldv.pojo.Passengercar;
 import com.qldv.pojo.Seat;
 import com.qldv.pojo.Ticketdetail;
 import com.qldv.pojo.Trip;
@@ -143,7 +144,7 @@ public class TicketDetailRepositoryImpl implements TicketDetailRepository {
                 ticket.setCreateddate(new Date());
                 ticket.setSeatId(s);
                 ticket.setTotalprice(s.getPrice());
-                ticket.setPaymentmethod("Tiền mặt");
+                ticket.setPaymentmethod(method);
                 ticket.setTripId(this.tripRepository.tripById(s.getTripId()));
                 ticket.setUserId(this.userRepository.getById(uId));
                 ticket.setPassengercarId(this.passengerRepository.getById(s.getPasCarId()));
@@ -157,6 +158,114 @@ public class TicketDetailRepositoryImpl implements TicketDetailRepository {
         }
 
         return false;
+    }
+
+    @Override
+    public int totalItem() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            Query q = session.createQuery("SELECT count(*) FROM Ticketdetail");
+            return Integer.parseInt(q.getSingleResult().toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public Long sumItem() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            Query q = session.createQuery("SELECT sum(totalprice) FROM Ticketdetail");
+            return Long.parseLong(q.getSingleResult().toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 0l;
+    }
+
+    @Override
+    public int countTicketsByTripId(int tripId) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+
+        Root rootT = query.from(Trip.class);
+        Root rootR = query.from(Ticketdetail.class);
+        Root rootS = query.from(Seat.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(rootR.get("tripId"), rootT.get("id")));
+        predicates.add(builder.equal(rootR.get("seatId"), rootS.get("id")));
+        predicates.add(builder.equal(rootR.get("tripId"), tripId));
+        query.multiselect(builder.count(rootS.get("id")));
+        query.where(predicates.toArray(new Predicate[]{}));
+        Query q = session.createQuery(query);
+
+        return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public List<Ticketdetail> getTickets(Map<String, String> params, int start, int limit) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Ticketdetail> query = builder.createQuery(Ticketdetail.class);
+        Root root = query.from(Ticketdetail.class);
+        Root rootU = query.from(User.class);
+        Root rootP = query.from(Passengercar.class);
+        Root rootT = query.from(Trip.class);
+        query = query.select(root);
+        Predicate p = builder.equal(root.get("userId"), rootU.get("id"));
+        Predicate pp = builder.equal(root.get("passengercarId"), rootP.get("id"));
+        Predicate ppp = builder.equal(root.get("tripId"), rootT.get("id"));
+        
+        if (params != null) {
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                Predicate p1 = builder.like(rootT.get("coachname").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p2 = builder.like(rootU.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p3 = builder.like(rootP.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p4 = builder.like(rootU.get("phone").as(String.class),
+                        String.format("%%%s%%", kw));
+                query = query.where(builder.or(p1, p2, p3, p4), builder.and(p, pp, ppp));
+            }
+        }
+
+        Query q = session.createQuery(query);
+        q.setFirstResult(start);
+        q.setMaxResults(limit);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Ticketdetail> getListNav(int start, int limit) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        try {
+            javax.persistence.Query query = session.createQuery("FROM Ticketdetail");
+            query.setFirstResult(start);
+            query.setMaxResults(limit);
+            return query.getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean editTicket(Ticketdetail t) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        try {
+            session.update(t);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

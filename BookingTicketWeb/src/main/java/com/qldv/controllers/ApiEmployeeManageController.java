@@ -17,7 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -45,6 +47,7 @@ public class ApiEmployeeManageController {
             String email = params.get("email");
             String phone = params.get("phone");
             String avtUrl = params.get("avt");
+            String userrole = params.get("userrole");
 
             User newUser = new User();
             newUser.setName(name);
@@ -53,6 +56,7 @@ public class ApiEmployeeManageController {
             newUser.setEmail(email);
             newUser.setPhone(phone);
             newUser.setAvatar(avtUrl);
+            newUser.setUserrole(userrole);
 
             if (password.equals(confirmPassword)) {
                 User u = this.userService.addUE(newUser);
@@ -82,7 +86,7 @@ public class ApiEmployeeManageController {
             Employee e = new Employee();
 
             e.setUserIdEmployee(Integer.parseInt(userIdEmployee));
-            e.setIdentitycard(Integer.parseInt(identityCard));
+            e.setIdentitycard(identityCard);
             e.setAddress(address);
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
             e.setDateofbirth(date);
@@ -97,5 +101,51 @@ public class ApiEmployeeManageController {
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    
+    @PutMapping(path = "/api/admin/update-user-employee")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@RequestBody Map<String, String> params) {
+        try {
+            String name = params.get("name");
+            String email = params.get("email");
+            String phone = params.get("phone");
+            int userIdEmployee = Integer.parseInt(params.get("userIdEmployee"));
+
+            User updateUser = this.userService.getById(userIdEmployee);
+            updateUser.setName(name);
+            updateUser.setEmail(email);
+            updateUser.setPhone(phone);
+
+            this.userService.editUser(updateUser);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @PutMapping(path = "/api/admin/update-employee")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateDriver(@RequestBody Map<String, String> params) {
+        try {
+            String identityCard = params.get("identityCard");
+            String address = params.get("address");
+            String dateOfBirth = params.get("dateOfBirth");
+            String gender = params.get("gender");
+            int userIdEmployee = Integer.parseInt(params.get("userIdEmployee"));
+
+            Employee empl = this.employeeService.findById(userIdEmployee);
+
+            empl.setIdentitycard(identityCard);
+            empl.setAddress(address);
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
+            empl.setDateofbirth(date);
+            empl.setGender(gender);
+
+            this.employeeService.editEmployee(empl);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

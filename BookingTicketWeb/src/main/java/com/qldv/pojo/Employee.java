@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
@@ -50,7 +52,7 @@ public class Employee implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "identitycard")
-    private int identitycard;
+    private String identitycard;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -66,10 +68,10 @@ public class Employee implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "gender")
     private String gender;
-    @OneToMany(mappedBy = "userIdEmployee")
+    @OneToMany(mappedBy = "userIdEmployee", fetch = FetchType.EAGER)
     private Set<Trip> tripSet;
     @JoinColumn(name = "user_id_employee", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne( optional = false)
     private User user;
 
     public Employee() {
@@ -79,7 +81,7 @@ public class Employee implements Serializable {
         this.userIdEmployee = userIdEmployee;
     }
 
-    public Employee(Integer userIdEmployee, int identitycard, String address, Date dateofbirth, String gender) {
+    public Employee(Integer userIdEmployee, String identitycard, String address, Date dateofbirth, String gender) {
         this.userIdEmployee = userIdEmployee;
         this.identitycard = identitycard;
         this.address = address;
@@ -95,11 +97,11 @@ public class Employee implements Serializable {
         this.userIdEmployee = userIdEmployee;
     }
 
-    public int getIdentitycard() {
+    public String getIdentitycard() {
         return identitycard;
     }
 
-    public void setIdentitycard(int identitycard) {
+    public void setIdentitycard(String identitycard) {
         this.identitycard = identitycard;
     }
 

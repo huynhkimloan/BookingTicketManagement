@@ -5,15 +5,21 @@
  */
 package com.qldv.controllers;
 
+import com.qldv.pojo.Trip;
 import com.qldv.service.RouteService;
+import com.qldv.service.TicketDetailService;
 import com.qldv.service.TripService;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,26 +35,26 @@ public class TripContronller {
     private TripService tripService;
     @Autowired
     private RouteService routeService;
+    @Autowired
+    private TicketDetailService ticketDetailService;
 
     @RequestMapping("/trip/{routeId}")
-    public String trip(Model model, @PathVariable("routeId") int routeId, @RequestParam(required = false) Map<String, String> params) throws ParseException {
+    public String trip(Model model, @PathVariable("routeId") int routeId, @ModelAttribute(value = "trip") Trip trip, @RequestParam(required = false) Map<String, String> params) {
+       
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        
+//        int tripId = Integer.parseInt(params.get("tripId"));
+//        int tripId = Integer.parseInt(params.get("trip"));
         Date fromDate = null;
         String from = params.getOrDefault("kw", null);
         if(from != null)
-            fromDate = f.parse(from);
+            try {
+                fromDate = f.parse(from);
+        } catch (ParseException ex) {
+            Logger.getLogger(TripContronller.class.getName()).log(Level.SEVERE, null, ex);
+        }
         model.addAttribute("tripDeparturedays", this.tripService.getDeparturedayTrips(fromDate, routeId));
+//        model.addAttribute("countSeat", this.ticketDetailService.countSeat(tripId));
         return "trip";
     }
     
-//    private void DayLimit(){
-//        this.dtpBirthDate.setDayCellFactory(cf -> {
-//            DatePicker dayNow = new DatePicker();
-//            String date = LocalDate.now().toString();
-//            int d = 0, m = 0, y = 0;
-//            dayNow.setValue(Utils.getPreviousDay(date, d, m, y));
-//            dtpBirthDate.setValue(Utils.getPreviousDay(date, d, m, y));
-//            return new MaxDateCell(dayNow.valueProperty());
-//        });
 }

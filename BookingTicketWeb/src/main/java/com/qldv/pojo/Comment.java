@@ -58,7 +58,7 @@ public class Comment implements Serializable {
     @ManyToOne(optional = false)
     private Trip tripId;
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    @JsonIgnore
+    
     @ManyToOne(optional = false)
     private User customerId;
 

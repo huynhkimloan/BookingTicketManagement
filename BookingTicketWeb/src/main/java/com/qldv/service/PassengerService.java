@@ -15,4 +15,10 @@ import java.util.List;
 public interface PassengerService {
 
     List<Passengercar> getPassengercars(String kw);
+    
+    int totalItem();
+    
+    Passengercar getById(int id);
+    
+    int getNumberSeat(int tripId);
 }

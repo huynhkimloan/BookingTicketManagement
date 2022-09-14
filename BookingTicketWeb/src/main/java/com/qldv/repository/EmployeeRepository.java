@@ -28,6 +28,6 @@ public interface EmployeeRepository {
     int totalItem();
 
     Employee findById(int employeeId);
-    
+
     Employee addE(Employee employee);
 }

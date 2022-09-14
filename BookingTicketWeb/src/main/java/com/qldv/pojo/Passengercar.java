@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,7 +60,7 @@ public class Passengercar implements Serializable {
     @NotNull
     @Column(name = "seats")
     private int seats;
-    @OneToMany(mappedBy = "passengercarId")
+    @OneToMany(mappedBy = "passengercarId", fetch = FetchType.EAGER)
     private Set<Trip> tripSet;
     @OneToMany(mappedBy = "passengercarId")
     private Set<Ticketdetail> ticketdetailSet;

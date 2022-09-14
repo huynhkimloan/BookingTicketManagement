@@ -52,7 +52,7 @@ public class Driver implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "identitycard")
-    private int identitycard;
+    private String identitycard;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -83,7 +83,7 @@ public class Driver implements Serializable {
         this.userIdDriver = userIdDriver;
     }
 
-    public Driver(Integer userIdDriver, int identitycard, String address, Date dateofbirth, String license) {
+    public Driver(Integer userIdDriver, String identitycard, String address, Date dateofbirth, String license) {
         this.userIdDriver = userIdDriver;
         this.identitycard = identitycard;
         this.address = address;
@@ -99,11 +99,11 @@ public class Driver implements Serializable {
         this.userIdDriver = userIdDriver;
     }
 
-    public int getIdentitycard() {
+    public String getIdentitycard() {
         return identitycard;
     }
 
-    public void setIdentitycard(int identitycard) {
+    public void setIdentitycard(String identitycard) {
         this.identitycard = identitycard;
     }
 

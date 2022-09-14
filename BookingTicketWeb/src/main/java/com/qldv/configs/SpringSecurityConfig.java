@@ -91,6 +91,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        Phân quyền
         http.authorizeRequests().antMatchers("/").permitAll()
                .antMatchers("/admin/**").access("hasAuthority('Admin')");
+         http.authorizeRequests().antMatchers("/tickets/**").access("hasAnyAuthority('Employee', 'Admin')");
           
         
 //        .antMatchers("/**/pay")

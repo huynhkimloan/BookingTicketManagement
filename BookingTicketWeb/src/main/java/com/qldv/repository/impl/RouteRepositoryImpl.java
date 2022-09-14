@@ -46,10 +46,10 @@ public class RouteRepositoryImpl implements RouteRepository {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
-    
+
     @Autowired
     private Cloudinary cloudinary;
-    
+
     @Override
     public List<Route> getRoutes() {
         Session session = this.sessionFactory.getObject().getCurrentSession();
@@ -79,8 +79,9 @@ public class RouteRepositoryImpl implements RouteRepository {
                         String.format("%%%s%%", kw));
                 Predicate p3 = builder.like(root.get("routename").as(String.class),
                         String.format("%%%s%%", kw));
-                query = query.where(builder.or(p1, p2, p3));
+                query.where(builder.or(p1, p2, p3));
             }
+            
         }
 
         Query q = session.createQuery(query);
@@ -120,20 +121,20 @@ public class RouteRepositoryImpl implements RouteRepository {
         Session session = this.sessionFactory.getObject().getCurrentSession();
 
         try {
-            File file = new File(r.getImage());
-        FileInputStream input;
-        try {
-            input = new FileInputStream(file);
-            MultipartFile multipartFile = new MockMultipartFile("file",
-            file.getName(), "text/plain", IOUtils.toByteArray(input));
-            Map m = this.cloudinary.uploader().upload(multipartFile.getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            r.setImage((String)m.get("secure_url"));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(RouteServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(RouteServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//            File file = new File(r.getImage());
+//        FileInputStream input;
+//        try {
+//            input = new FileInputStream(file);
+//            MultipartFile multipartFile = new MockMultipartFile("file",
+//            file.getName(), "text/plain", IOUtils.toByteArray(input));
+//            Map m = this.cloudinary.uploader().upload(multipartFile.getBytes(),
+//                    ObjectUtils.asMap("resource_type", "auto"));
+//            r.setImage((String)m.get("secure_url"));
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(RouteServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(RouteServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
             session.update(r);
 
             return true;
@@ -169,7 +170,7 @@ public class RouteRepositoryImpl implements RouteRepository {
         }
         return 0;
     }
-    
+
     @Override
     public int countItem(Object obj) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
@@ -185,21 +186,11 @@ public class RouteRepositoryImpl implements RouteRepository {
     @Override
     public Route findById(int routeId) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
-//        try {
-//            Query query = session.createQuery("FROM Route WHERE id = :routeId");
-//            query.setParameter("id", routeId);
-//            Route obj = (Route) query.getSingleResult();
-//            return obj;
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return null;
 
         return session.get(Route.class, routeId);
     }
-    
-    
-     @Override
+
+    @Override
     public List<Route> getRoutes(String kw, String kw1, int page) {
         Session session = this.sessionFactory.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

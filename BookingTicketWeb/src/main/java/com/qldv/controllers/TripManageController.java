@@ -6,6 +6,7 @@
 package com.qldv.controllers;
 
 import com.qldv.pojo.Trip;
+import com.qldv.service.EmployeeService;
 import com.qldv.service.PassengerService;
 import com.qldv.service.RouteService;
 import com.qldv.service.TripService;
@@ -43,6 +44,9 @@ public class TripManageController {
 
     @Autowired
     private TripService tripService;
+    
+    @Autowired
+    private EmployeeService employeeService;
 
     @Autowired
     private RouteService routeService;
@@ -84,6 +88,12 @@ public class TripManageController {
         mm.addAttribute("pcars", passengerService.getPassengercars(""));
         return "updatetrip";
     }
+    
+    @GetMapping("/edittrip/image/{tripId}")
+    public String viewTripEditImage(ModelMap mm, @PathVariable("tripId") int tripId) {
+        mm.addAttribute("trip", tripService.tripById(tripId));
+        return "edit_image_trip";
+    }
 
     @PostMapping("/edittrip")
     public String doUpdateTrip(ModelMap mm, @RequestParam(required = false) Map<String, String> params,
@@ -120,7 +130,7 @@ public class TripManageController {
             @ModelAttribute(value = "trip") @Valid Trip trip, BindingResult rs) throws ParseException {
         String ms = "";
         if (rs.hasErrors()) {
-             ms += "Đã có lỗi xảy ra! Vui lòng thử lại";
+            ms += "Đã có lỗi xảy ra! Vui lòng thử lại";
             mm.addAttribute("ms", ms);
             return "addtrip";
         }
@@ -130,11 +140,11 @@ public class TripManageController {
         String time2 = params.get("arrivaltime");
 
         Date departureday = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-        Time departuretime = Time.valueOf(time1);
-        Time arrivaltime = Time.valueOf(time2);
+        Date departuretime = new SimpleDateFormat("HH:mm:ss").parse(time1);
+        Date arrivaltime = new SimpleDateFormat("HH:mm:ss").parse(time2);
 
         trip.setDepartureday(departureday);
-        trip.setDeparturetime(departureday);
+        trip.setDeparturetime(departuretime);
         trip.setArrivaltime(arrivaltime);
 
         this.tripService.addTrip(trip);

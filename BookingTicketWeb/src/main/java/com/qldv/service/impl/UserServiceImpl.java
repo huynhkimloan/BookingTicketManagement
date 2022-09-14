@@ -113,13 +113,32 @@ public class UserServiceImpl implements UserService {
     public User addUE(User user) {
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));//Băm mật khẩu
         user.setActive(Boolean.TRUE);
-        user.setUserrole(User.EMPLOYEE);
         return this.userRepository.addU(user);
     }
 
     @Override
     public User getById(int id) {
         return this.userRepository.getById(id);
+    }
+
+    @Override
+    public boolean editUser(User user) {
+        return this.userRepository.editUser(user);
+    }
+
+    @Override
+    public int totalItem(String kw) {
+        return this.userRepository.totalItem(kw);
+    }
+
+    @Override
+    public List<User> getUserName() {
+        return this.userRepository.getUserName();
+    }
+
+    @Override
+    public String getPassById(int id) {
+        return this.userRepository.getPassById(id);
     }
 
 }

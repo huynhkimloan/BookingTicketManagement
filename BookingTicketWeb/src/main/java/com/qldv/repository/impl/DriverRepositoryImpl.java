@@ -6,6 +6,7 @@
 package com.qldv.repository.impl;
 
 import com.qldv.pojo.Driver;
+import com.qldv.pojo.User;
 import com.qldv.repository.DriverRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +44,9 @@ public class DriverRepositoryImpl implements DriverRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Driver> query = builder.createQuery(Driver.class);
         Root root = query.from(Driver.class);
+        Root rootU = query.from(User.class);
         query = query.select(root);
+        Predicate p = builder.equal(root.get("userIdDriver"), rootU.get("id"));
 
         if (params != null) {
             String kw = params.get("kw");
@@ -54,7 +57,13 @@ public class DriverRepositoryImpl implements DriverRepository {
                         String.format("%%%s%%", kw));
                 Predicate p3 = builder.like(root.get("identitycard").as(String.class),
                         String.format("%%%s%%", kw));
-                query = query.where(builder.or(p1, p2, p3));
+                Predicate p4 = builder.like(rootU.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p5 = builder.like(rootU.get("email").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p6 = builder.like(rootU.get("phone").as(String.class),
+                        String.format("%%%s%%", kw));
+                query = query.where(builder.or(p1, p2, p3, p4, p5, p6), builder.and(p));
             }
         }
 
@@ -144,7 +153,7 @@ public class DriverRepositoryImpl implements DriverRepository {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth);
             drv.setDateofbirth(date);
             drv.setUserIdDriver(Integer.parseInt(userIdDriver));
-            drv.setIdentitycard(Integer.parseInt(identityCard));
+            drv.setIdentitycard(identityCard);
             drv.setAddress(address);
             drv.setLicense(license);
             session.save(drv);

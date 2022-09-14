@@ -5,7 +5,10 @@
  */
 package com.qldv.repository.impl;
 
+import com.qldv.pojo.Driver;
 import com.qldv.pojo.Driverdetail;
+import com.qldv.pojo.Trip;
+import com.qldv.pojo.User;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Query;
@@ -18,6 +21,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.qldv.repository.DriverDetailRepository;
+import javax.persistence.criteria.Predicate;
 
 /**
  *
@@ -36,20 +40,24 @@ public class DriverDetaiRepositoryImpl implements DriverDetailRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Driverdetail> query = builder.createQuery(Driverdetail.class);
         Root root = query.from(Driverdetail.class);
+        Root rootT = query.from(Trip.class);
+        Root rootU = query.from(User.class);
         query = query.select(root);
-
-//        if (params != null) {
-//            String kw = params.get("kw");
-//            if (kw != null && !kw.isEmpty()) {
-//                Predicate p1 = builder.like(root.get("address").as(String.class),
-//                        String.format("%%%s%%", kw));
-//                Predicate p2 = builder.like(root.get("license").as(String.class),
-//                        String.format("%%%s%%", kw));
-//                Predicate p3 = builder.like(root.get("identitycard").as(String.class),
-//                        String.format("%%%s%%", kw));
-//                query = query.where(builder.or(p1, p2, p3));
-//            }
-//        }
+        Predicate p = builder.equal(root.get("userIdDriver"), rootU.get("id"));
+        Predicate pp = builder.equal(root.get("tripId"), rootT.get("id"));
+        
+        if (params != null) {
+            String kw = params.get("kw");
+            if (kw != null && !kw.isEmpty()) {
+                Predicate p1 = builder.like(rootT.get("coachname").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p2 = builder.like(rootU.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p3 = builder.like(root.get("driverrole").as(String.class),
+                        String.format("%%%s%%", kw));
+                query = query.where(builder.or(p1, p2, p3), builder.and(p, pp));
+            }
+        }
 
         Query q = session.createQuery(query);
         q.setFirstResult(start);
@@ -103,7 +111,7 @@ public class DriverDetaiRepositoryImpl implements DriverDetailRepository {
 
     @Override
     public boolean addDriver(Driverdetail d) {
-       Session session = this.sessionFactory.getObject().getCurrentSession();
+        Session session = this.sessionFactory.getObject().getCurrentSession();
         try {
             session.save(d);
             return true;

@@ -6,8 +6,10 @@
 package com.qldv.controllers;
 
 import com.qldv.pojo.Driver;
+import com.qldv.pojo.User;
 import com.qldv.service.DriverService;
 import com.qldv.service.RouteService;
+import com.qldv.service.UserService;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,6 +35,9 @@ public class DriverManageController {
     private DriverService driverService;
     
     @Autowired
+    private UserService userService;
+    
+    @Autowired
     private RouteService routeService;
 
     @GetMapping("/list")
@@ -48,7 +53,7 @@ public class DriverManageController {
         mm.addAttribute("totalItem", driverService.totalItem() / 8);
         return "drivers";
     }
-
+    
     @GetMapping("/adddriver")
     public String viewDriverNew() {
         return "adddriver";
@@ -57,36 +62,10 @@ public class DriverManageController {
     @GetMapping("/editdriver/{driverId}")
     public String viewDriverEdit(ModelMap mm, @PathVariable("driverId") int driverId) {
         mm.addAttribute("driver", driverService.findById(driverId));
+        mm.addAttribute("user", userService.getById(driverId));
         return "updatedriver";
     }
-
-    @PostMapping("/editdriver")
-    public String doUpdateDriver(ModelMap mm, @ModelAttribute(value = "driver") Driver driver,
-            BindingResult rs) {
-        if (rs.hasErrors()) {
-            return "updatedriver";
-        }
-
-        if (this.driverService.editDriver(driver) == true) {
-            viewDriverList(mm);
-            return "redirect:/admin/drivers/list";
-        }
-        return "updatedriver";
-    }
-
-//    @PostMapping("/savedriver")
-//    public String viewRouteSave(ModelMap mm, @ModelAttribute(value = "driver") @Valid Driver driver,
-//            BindingResult rs) {
-//        if (rs.hasErrors()) {
-//            return "adddriver";
-//        }
-//        if (this.driverService.addDriver(driver) == true) {
-//            viewDriverList(mm);
-//            return "redirect:/admin/drivers/list";
-//        }
-//        return "adddriver";
-//    }
-
+    
     @RequestMapping("/deletedriver/{driverId}")
     public String viewRouteRemove(ModelMap mm, @PathVariable("driverId") int driverId) {
         driverService.deleteDriver(driverId);

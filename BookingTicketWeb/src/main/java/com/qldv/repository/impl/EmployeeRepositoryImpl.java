@@ -6,6 +6,7 @@
 package com.qldv.repository.impl;
 
 import com.qldv.pojo.Employee;
+import com.qldv.pojo.User;
 import com.qldv.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
-    
 
     @Override
     public List<Employee> getEmployees(Map<String, String> params, int start, int limit) {
@@ -39,7 +39,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Employee> query = builder.createQuery(Employee.class);
         Root root = query.from(Employee.class);
+        Root rootU = query.from(User.class);
         query = query.select(root);
+        Predicate p = builder.equal(root.get("userIdEmployee"), rootU.get("id"));
 
         if (params != null) {
             String kw = params.get("kw");
@@ -50,7 +52,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                         String.format("%%%s%%", kw));
                 Predicate p3 = builder.like(root.get("identitycard").as(String.class),
                         String.format("%%%s%%", kw));
-                query = query.where(builder.or(p1,p2, p3));
+                Predicate p4 = builder.like(rootU.get("name").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p5 = builder.like(rootU.get("email").as(String.class),
+                        String.format("%%%s%%", kw));
+                Predicate p6 = builder.like(rootU.get("phone").as(String.class),
+                        String.format("%%%s%%", kw));
+                query = query.where(builder.or(p1, p2, p3, p4, p5, p6), builder.and(p));
             }
         }
 
@@ -140,10 +148,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             session.save(employee);
 
             return employee;
-        } catch(HibernateException ex) {
+        } catch (HibernateException ex) {
             ex.printStackTrace();
         }
-        
+
         return null;
     }
 

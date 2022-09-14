@@ -67,20 +67,12 @@
         </c:forEach>
     </tbody>
 </table>
-
 <nav aria-label="Page navigation example" style="float: right">
     <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
         <c:forEach var="i" begin="0" end="${totalItem}">
             <c:url value="/admin/driverdetails/list/${i+1}" var="action" />
             <li class="page-item"><a class="page-link" href="${action}"><c:out value="${i+1}"/></a></li>
-            </c:forEach>
-        <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
+        </c:forEach>
     </ul>
 </nav>
+<script src="<c:url value="/js/route.js"/>"></script>

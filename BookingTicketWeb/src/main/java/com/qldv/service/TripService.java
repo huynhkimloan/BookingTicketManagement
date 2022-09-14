@@ -28,9 +28,11 @@ public interface TripService {
 
     List<Trip> getTrips(String kw);
     
+    List<Trip> getTrips();
+    
     Route getRouteByTrip(int id);
 
-    boolean addTrip(Trip t);
+    Trip addTrip(Trip t);
 
     boolean editTrip(Trip t);
 

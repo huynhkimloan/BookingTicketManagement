@@ -25,5 +25,21 @@ public class PassengerServiceImpl implements PassengerService{
     public List<Passengercar> getPassengercars(String kw) {
         return this.passengerRepository.getPassengercars(kw);
     }
+
+    @Override
+    public int totalItem() {
+        return this.passengerRepository.totalItem();
+    }
+
+    @Override
+    public Passengercar getById(int id) {
+         return this.passengerRepository.getById(id);
+    }
+    
+    @Override
+    public int getNumberSeat(int tripId) {
+        return this.passengerRepository.getNumberSeat(tripId);
+    }
+    
     
 }

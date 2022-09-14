@@ -45,19 +45,52 @@ function addComment(event, tripId) {
 
 
         let area = document.getElementById("commentArea");
-        
+
         area.innerHTML = `
-        <div class="col-md-4 col-xs-12 " style="padding:10px; ">
-            <div class="card-body ">
-                <p>Nội dung: ${data.content}</p>
-                <p class="comment-date">${moment(data.createddate).fromNow()} </p>
-                <hr>                   
+        
+        <div class="be-comment">
+            <div class="be-img-comment">	
+                    <a href="blog-detail-2.html">
+                        <img  src="${data.customerId.avatar}" class="rounded-circle be-ava-comment" />				
+                    </a>
                 </div>
-            </div>
-       </div>
+                <div class="be-comment-content">
+
+                    <span class="be-comment-name">
+                        <a href="blog-detail-2.html">${data.customerId.name}</a>
+                    </span>
+                    <span class="be-comment-time comment-date">
+                         <i class="fa-solid fa-clock"></i>
+                         ${moment(data.createddate).fromNow()}
+                    </span>
+
+                    <p class="be-comment-text">
+                        ${data.content}
+                    </p>
+                </div>
+        </div>
+       
         ` + area.innerHTML;
+        let reset = document.getElementById("commentId");
+        reset.value = null;
 
 
     });
+}
+
+let mybutton = document.getElementById("myBtn");
+
+window.onscroll = function() {scrollFunction();};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.documentElement.scrollTop = 0;
 }
 

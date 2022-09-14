@@ -15,6 +15,14 @@ import java.util.Map;
  */
 public class Utils {
 
+//    public static int count(Seat seat) {
+//        int q = 0;
+//        if (seat != null) {
+//            q += seat.getQuantity();
+//        }
+//        return q;
+//    }
+
     public static int count(Map<Integer, Seat> seat) {
         int q = 0;
         if (seat != null) {
@@ -41,4 +49,17 @@ public class Utils {
         
         return kq;
     }
+//    public static Map<String, String> seatStats(Seat s) {
+//        Long a = 0l;
+//        int q = 0;
+//
+//        q += s.getQuantity();
+//        a += s.getQuantity() * s.getPrice();
+//        Map<String, String> kq = new HashMap<>();
+//
+//        kq.put("counter", String.valueOf(q));
+//        kq.put("amount", String.valueOf(a));
+//
+//        return kq;
+//    }
 }

@@ -6,6 +6,7 @@
 package com.qldv.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -19,6 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -52,21 +55,21 @@ public class Route implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 20, message = "{route.routename.notNullMsg}")
     @Column(name = "routename")
     private String routename;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 20, message = "{route.startingpoint.notNullMsg}")
     @Column(name = "startingpoint")
     private String startingpoint;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 20, message = "{route.destination.notNullMsg}")
     @Column(name = "destination")
     private String destination;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{route.price.notNullMsg}")
     @Column(name = "price")
     private long price;
     @Column(name = "specialprice")
@@ -74,11 +77,16 @@ public class Route implements Serializable {
     @Size(max = 150)
     @Column(name = "image")
     private String image;
+    @Column(name = "stretch")
+    private String stretch;
+    @Column(name = "time")
+   
+    private int time;
 //    @OneToMany(mappedBy = "routeId")
 //    private Set<Trip> tripSet;
     @OneToMany(mappedBy = "routeId", fetch = FetchType.LAZY)
     private List<Trip> trips;
-
+    
     @Transient
     private MultipartFile file;
 
@@ -214,5 +222,38 @@ public class Route implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
+
+    /**
+     * @return the stretch
+     */
+    public String getStretch() {
+        return stretch;
+    }
+
+    /**
+     * @param stretch the stretch to set
+     */
+    public void setStretch(String stretch) {
+        this.stretch = stretch;
+    }
+
+    /**
+     * @return the time
+     */
+    public int getTime() {
+        return time;
+    }
+
+    /**
+     * @param time the time to set
+     */
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    /**
+     * @return the time
+     */
+    
 
 }

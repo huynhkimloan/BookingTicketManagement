@@ -3,9 +3,7 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%--<c:if test="${currentUser != null}">
-    ${currentUser.email}-${currentUser.name}
-</c:if>--%>
+
 
 <div id="demo" class="carousel slide" data-bs-ride="carousel" style="padding-top:10px;">
 
@@ -19,7 +17,7 @@
     <!-- The slideshow/carousel -->
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="<c:url value="/img/a1.jpg"/>" alt="Los Angeles" class="d-block w-100 ">
+            <img src="<c:url value="/img/a1.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
             <div class="carousel-caption">
                 <h1 style="padding-top: 100px; ">CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -27,7 +25,7 @@
         </div>
 
         <div class="carousel-item">
-            <img src="<c:url value="/img/a3.jpg"/>" alt="Los Angeles" class="d-block w-100 ">
+            <img src="<c:url value="/img/a3.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
             <div class="carousel-caption">
                 <h1 style="padding-top: 100px; " >CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -35,7 +33,7 @@
         </div>
 
         <div class="carousel-item">
-            <img src="<c:url value="/img/a5.jpg"/>" alt="Los Angeles" class="d-block w-100 ">
+            <img src="<c:url value="/img/a5.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
             <div class="carousel-caption">
                 <h1 style="padding-top:100px; ">CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -97,40 +95,73 @@
                 </li> 
             </div>
             <li class="nav-item btnSearch" >
-                <input style="background-color: rgba(255, 99, 71, 0.5); border-color: orange; border-radius: 5px;" type="submit" value="Tìm" />
+                <input style="background-color: rgba(255, 99, 71, 0.5); border-color: orange; border-radius: 5px;" id="search-search" type="submit" value="Tìm" />
             </li>
         </ul> 
     </div>
 </form>
 
-<div>
-    <ul class="pagination">
-        <c:forEach begin="1" end="${Math.ceil(counter/6)}" var="a">
-            <li class="page-item"><a class="page-link" href="<c:url value="/" />?page=${a}">${a}</a></li>
-            </c:forEach>
-    </ul>
-</div>
 <c:if test="${routes.size() == 0}">
-    <p>Không có tuyến bạn cần tìm</p>
+    <div class="alert alert-danger" style="margin-left: 27%; margin-top: 70px; width: 50%; font-size: 20px; text-align: center">Không có tuyến bạn cần tìm !!!</div>
 </c:if>
-
+<c:if test="${routes.size() != 0}">
+    <div>
+        <ul class="pagination">
+            <c:forEach begin="1" end="${Math.ceil(counter/6)}" var="a">
+                <li class="page-item"><a class="page-link" href="<c:url value="/" />?page=${a}">${a}</a></li>
+                </c:forEach>
+        </ul>
+    </div>
+</c:if>
 <div class="row">
-    <c:forEach var="route" items="${routes}">
+
+    <c:forEach var="route" items="${routes}">        
         <div class="col-md-4 col-xs-12" style="padding:10px;">
             <div class="card">
+                <img style=" height: 250px;" class=" img1 img-fluid card-header" src="<c:url value="${route.image}"/>" alt="${route.routename}" />                
 
-                <img class="img-fluid card-header" src="<c:url value="${route.image}"/>" alt="${route.routename}" />
                 <div class="card-body ">
-
-                    <h3><i> ${route.startingpoint} - ${route.destination}</i></h3>
-<!--                    <h9>Ngày khởi hành: <b><fmt:formatDate pattern = "dd/MM/yyyy" value = "${t.departureday}" /></b></h9>-->
+                    <h3 ><i class="fa-solid fa-map-location-dot">  ${route.startingpoint} - ${route.destination}</i></h3>
                     <hr>
-                    <p class="product-carousel-price"><small>Giá: <i> ${route.price} 000 VNĐ</i></small></p> 
-<!--                    <p><small>Giờ: <fmt:formatDate type = "time" value = "${t.departuretime}" /> - 
-                    <fmt:formatDate type = "time" value = "${t.arrivaltime}" /> </small></p>-->
-                    <a href="<c:url value="/trip/${route.id}"/>"  id="priceInfo" class="btn btn-dark action">Xem chi tiết</a>
+                    <diV style="display: flex;" class="show-p">
+
+                        <g><i class="fa-solid fa-location-dot" > ${route.stretch}km </i></g>
+                        <p><i class="fa-solid fa-clock"> ${route.time}h </i></p>
+                        <p class="product-carousel-price"><small> <i class="fa-solid fa-money-bill-wave">  ${route.price} 000 VNĐ</i></small></p> 
+                    </diV>
+                    <a href="<c:url value="/trip/${route.id}"/>"  id="priceInfo" class="btn btn-dark action" style="width: 100%; font-size: 20px;">Xem chi tiết</a>
                 </div>
             </div>
         </div>
     </c:forEach>
 </div>
+
+<hr style="margin-top: 30px;">
+<h1 style="margin-top: 30px; color:orange; font-size: 50px; font-family: SFProText;">CHẤT LƯỢNG LÀ DANH DỰ </h1>
+<div style="margin-top: 30px; display: flex; " class="infomation">
+    <div class ="info" >
+        <h1 class="h1"><i class="fa-solid fa-people-group"></i> 20M</h1>
+        <H4 style="margin:10px; color: orange;">Hơn 20 triệu lượt khách</H4>
+        <P style="margin:10px; ">Phục vụ hơn 20 triệu lượt khách/bình quân 1 năm trên toàn quốc</P>
+    </div>
+    <div class ="info" >
+        <h1 class="h1"><i class="fa-solid fa-house-chimney-window " ></i> 250</h1>
+        <H4 style="margin:10px; color: orange;">Hơn 250 phòng vé, phòng khách</H4>
+        <P style="margin:10px; ">Có hơn 250 phòng vé, trạm trung chuyển, bến xe...trên toàn hệ thống</P>
+    </div >
+    <div style=" border-style: dotted; color: orange;" >
+        <h1 class="h1"><i class="fa-solid fa-bus"></i> 1600</h1>
+        <H4 style="margin:10px; color: orange;">Hơn 1,600 chuyến mỗi ngày</H4>
+        <P style="margin:10px; ">Phục vụ hơn 1600 chuyến xe đường dài và liên tỉnh mỗi ngày</P>
+    </div>
+</div>
+
+
+<!--    <div class="card" style="width:400px">
+  <img class="card-img-top" src="img_avatar1.png" alt="Card image">
+  <div class="card-body">
+    <h4 class="card-title">John Doe</h4>
+    <p class="card-text">Some example text.</p>
+    <a href="#" class="btn btn-primary">See Profile</a>
+  </div>
+</div>-->

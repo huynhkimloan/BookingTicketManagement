@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
+<h2 class="text-center text-secondary">THAY ĐỔI TÀI XẾ CHUYẾN XE</h2>
 <c:url value="/admin/driverdetails/editdriver" var="edit" />
 <form:form action="${edit}" modelAttribute="driver" method="post">
     <div class="mb-3">
@@ -26,6 +26,7 @@
     <div class="mb-3">
         <label class="form-label">Tài xế</label>
         <form:select path="userIdDriver" class="form-select">
+            <option>${driver.userIdDriver.user.name}</option>
             <c:forEach items="${users}" var="r">
                 <option value="${r.id}">${r.name}</option>
             </c:forEach>
@@ -34,6 +35,7 @@
     <div class="mb-3">
         <label class="form-label">Vị trí</label>
         <form:select path="driverrole" class="form-select">
+                <option>${driver.driverrole}</option>
                 <option>MainDriver</option>
                 <option>Driver</option>
                 <option>Assistant</option>

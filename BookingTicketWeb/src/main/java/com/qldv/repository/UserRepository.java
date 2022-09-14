@@ -18,6 +18,10 @@ public interface UserRepository {
 
     List<User> getUsers(String username);
 
+    List<User> getUserName();
+
+    String getPassById(int userId);
+
     User getUserByUsername(String username);
 //   User getUserById(int id);
 
@@ -27,4 +31,8 @@ public interface UserRepository {
     User addU(User user);
 
     User getById(int userId);
+
+    boolean editUser(User u);
+
+    int totalItem(String kw);
 }

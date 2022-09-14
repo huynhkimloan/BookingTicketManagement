@@ -16,16 +16,28 @@ import java.util.Map;
  * @author Admin
  */
 public interface TicketDetailRepository {
+    
+    List<Ticketdetail> getTickets(Map<String, String> params, int start, int limit);
 
+    List<Ticketdetail> getListNav(int start, int limit);
+
+    boolean editTicket(Ticketdetail t);
+    
     boolean deleteTicketDetail(int tripId);
 
     List<Object[]> findTicketsByTripId(int tripId);
-    
+
     List<Seat> getSeat(String kw);
-    
+
     long countSeat(String kw);
-    
+
     Object getUsers(String uname);
-    
-    boolean addReceipt(Map<Integer, Seat> seat,int uId, String method);
+
+    boolean addReceipt(Map<Integer, Seat> seat, int uId, String method);
+
+    int totalItem();
+
+    Long sumItem();
+
+    int countTicketsByTripId(int tripId);
 }

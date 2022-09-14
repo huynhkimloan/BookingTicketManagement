@@ -59,6 +59,10 @@ public class Ticketdetail implements Serializable {
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createddate;
+    
+    @Column(name = "note")
+    private String note;
+    
     @JoinColumn(name = "passengercar_id", referencedColumnName = "id")
     @ManyToOne
     private Passengercar passengercarId;
@@ -173,6 +177,20 @@ public class Ticketdetail implements Serializable {
     @Override
     public String toString() {
         return "com.qldv.pojo.Ticketdetail[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the note
+     */
+    public String getNote() {
+        return note;
+    }
+
+    /**
+     * @param note the note to set
+     */
+    public void setNote(String note) {
+        this.note = note;
     }
     
 }

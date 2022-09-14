@@ -65,7 +65,6 @@ public class DriverDetailManageController {
     @GetMapping("/editdriver/{driverId}")
     public String viewDriverEdit(ModelMap mm, @PathVariable("driverId") int driverId) {
         mm.addAttribute("driver", driverDetailService.findById(driverId));
-        mm.addAttribute("user", userService.getById(driverId));
         mm.addAttribute("users", userService.getUsers("Driver"));
         return "updatedriverdt";
     }
@@ -73,14 +72,13 @@ public class DriverDetailManageController {
     @GetMapping("/adddriver")
     public String viewDriverNew(ModelMap mm) {
         mm.addAttribute("driver", new Driverdetail());
-        mm.addAttribute("trips", tripService.getTrips("1"));
+        mm.addAttribute("trips", tripService.getTrips());
         mm.addAttribute("users", userService.getUsers("Driver"));
         return "adddriverdt";
     }
 
     @PostMapping("/editdriver")
-    public String doUpdateDriver(ModelMap mm, @ModelAttribute(value = "driver") Driverdetail driverdt,
-            @ModelAttribute(value = "user") User user, BindingResult rs) {
+    public String doUpdateDriver(ModelMap mm, @ModelAttribute(value = "driver") Driverdetail driverdt, BindingResult rs) {
         if (rs.hasErrors()) {
             return "updatedriverdt";
         }

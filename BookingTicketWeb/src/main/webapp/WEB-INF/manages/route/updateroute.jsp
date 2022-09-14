@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
+<h2 class="text-center text-secondary">THAY ĐỔI THÔNG TIN TUYẾN XE</h2>
 <c:url value="/admin/routes/editroute" var="edit" />
 <form:form action="${edit}" modelAttribute="route" method="post" enctype="multipart/form-data" acceptCharset="UTF-8">
     <div class="mb-3">
@@ -18,29 +18,30 @@
     <div class="mb-3">
         <label class="form-label">Tên tuyến</label>
         <form:input type="text" class="form-control" path="routename"/>
+        <form:errors path="routename" cssClass="text-danger" element="div"/>
     </div>
     <div class="mb-3">
         <label class="form-label">Điểm đi</label>
         <form:input type="text" class="form-control" path="startingpoint"/>
+        <form:errors path="startingpoint" cssClass="text-danger" element="div"/>
     </div>
     <div class="mb-3">
         <label class="form-label">Điểm đến</label>
         <form:input type="text" class="form-control" path="destination"/>
+        <form:errors path="destination" cssClass="text-danger" element="div"/>
     </div>
     <div class="mb-3">
         <label class="form-label">Giá tiền</label>
         <form:input type="number" class="form-control" path="price"/>
+        <form:errors path="price" cssClass="text-danger" element="div"/>
     </div>
     <div class="mb-3">
         <label class="form-label">Giá đặc biệt</label>
         <form:input type="number" class="form-control" path="specialprice"/>
     </div>
     <div class="mb-3">
-        <label class="form-label">Ảnh</label>
-        <form:input type="text" class="form-control" path="image" id="display-image"/>
-        
-        <label for="firstimg"><i class="btn btn-secondary" style = "margin: 5px 0 5px 0; cursor: pointer;">Chọn ảnh </i></label>
-        <input type = "file" id = "firstimg" hidden="hidden" onchange="getImage()"/>
+        <label class="form-label">Ảnh tuyến</label>
+        <form:input type="text" class="form-control" path="image" readonly="true"/>
     </div>
     <div>
         <input class="btn btn-warning" type="submit" value="Sửa"/>     
@@ -48,12 +49,3 @@
            data-placement="top" title="Hủy"><i class="fas fa-undo"></i></a> 
     </div>
 </form:form>
-
-<script type="text/javascript">
-    function getImage()
-    {
-        const fileChoose = document.getElementById('firstimg');
-        document.getElementById('display-image').setAttribute('value',
-        fileChoose.value.match( /[\/\\]([\w\d\s\.\-\(\)]+)$/)[1]);
-    }
-</script>

@@ -3,55 +3,49 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import fetch from 'node-fetch';
 
-function deleteRoute(endpoint, id, btn) {
-    let r = document.getElementById(`row${id}`);
-    let load = document.getElementById(`load${id}`);
-    load.style.display = "block";
-    btn.style.display = "none";
-    fetch(endpoint, {
-        method: 'delete'
-    }).then(function(res) {
-        if (res.status !== 204)
-            alert("Something wrong!!!");
-        load.style.display = "none";
-        r.style.display = "none";
-    }).catch(function(err) {
-        console.error(err);
-        btn.style.display = "block";
-        load.style.display = "none";
-    });
-}
+/* global fetch */
+const form = document.getElementById("imageRoute");
 
-function getRoutes(endpoint) {
-    fetch(endpoint).then(function (res) {
-        return res.json();
-    }).then(function (data) {
-        let d = document.getElementById("myRoute");
-        if (d !== null) {
-            let h = "";
-            for (let i = 0; i < data.length; i++)
-                h += `
-                <tr id="row${data[i].id}">
-                    <td>${data[i].routename}</td>
-                    <td>${data[i].startingpoint}</td>
-                    <td>${data[i].destination}</td>
-                    <td>${data[i].price}</td>
-                    <td>${data[i].specialprice}</td>
-                    <td>
-                        <div class="spinner-border text-info" style="display:none" id="load${data[i].id}"></div>
-                        <button class="btn btn-danger" onclick="deleteProduct('${endpoint + "/" + data[i].id}', ${data[i].id}, this)"> <i class="bi bi-trash text-light"></i>Xóa tuyến xe</button>
-                    </td>
-                </tr>
-            `
-            d.innerHTML = h;
+function updateImageRoute() {
+    event.preventDefault();
+
+    const data = new FormData();
+    const file = document.getElementById('firstimg').files[0];
+    data.append("file", file);
+    data.append("upload_preset", "update_avartar");
+    fetch('https://api.cloudinary.com/v1_1/dvsqhstsi/upload', {
+        method: "post",
+        body: data
+    }).then((res) => {
+        if (res.ok) {
+            resCopy = res.clone();
+            console.log(res); //first consume it in console.log
+            return res.json(); //then consume it again, the error happens
         }
-
-        let d2 = document.getElementById("mySpinner");
-        d2.style.display = "none";
-    }).catch(function (err) {
-        console.error(err);
+    }).then((data) => {
+        if (data && data.secure_url) {
+            return fetch("/BookingTicketWeb/api/admin/update-image-route", {
+                method: 'put',
+                body: JSON.stringify({
+                    "id": form.elements.id.value,
+                    "urlImage": data.secure_url
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        } else {
+            throw Error("Có lỗi xảy ra, vui lòng quay lại sau!!");
+        }
+    }).then((code) => {
+        return console.log(code);
+    }).then(() => {
+        alert('Thay đổi ảnh tuyến xe thành công!');
+        document.location.href = "/BookingTicketWeb/admin/routes/list";
+    }).catch((error) => {
+        const errEle = document.getElementById('error-message');
+        errEle.textContent = "BẠN CẦN CHỌN ẢNH ĐỂ THAY ĐỔI!!!";
+        console.error(error);
     });
 }
-

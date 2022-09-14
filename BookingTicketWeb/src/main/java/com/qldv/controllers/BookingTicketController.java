@@ -23,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -31,19 +30,18 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class BookingTicketController {
+
     @Autowired
     private TicketDetailService ticketDetailService;
-    
+
     @Autowired
     private TripService tripService;
-    
+
     @Autowired
     private UserService userDetailService;
 
     @RequestMapping("/reservation/{tripId}")
-    public String BookingTicket(Model model, @PathVariable("tripId") int tripId, @RequestParam(required = false) Map<String, String> params,
-            HttpSession session, HttpServletRequest request, Authentication au) {
-        User u = this.userDetailService.getUsers(au.getName()).get(0);
+    public String BookingTicket(Model model, @PathVariable("tripId") int tripId) {
         Trip t = tripService.tripById(tripId);
         Route r = t.getRouteId();
         long price = r.getPrice();
@@ -66,19 +64,32 @@ public class BookingTicketController {
         }
         model.addAttribute("listSeatA", newSeatA);
         model.addAttribute("listSeatB", newSeatB);
-        model.addAttribute("pasCar", t.getPassengercarId());
         model.addAttribute("tripId", tripId);
+        model.addAttribute("pasCar", t.getPassengercarId());
         model.addAttribute("price", price);
-        model.addAttribute("user", u);
-        model.addAttribute("trip", this.tripService.findById(tripId));
-        model.addAttribute("price", price);
-
         return "reservation";
     }
 
-    @RequestMapping("/bill")
-    public String billPage(HttpSession session, Model model) {
+    @RequestMapping("/reservation/{tripId}/confirm-seat")
+    public String confirmPage(HttpSession session, @PathVariable("tripId") int tripId, Model model) {
 
+        Map<Integer, Seat> seat = (Map<Integer, Seat>) session.getAttribute("seat");
+        if (seat != null) {
+            model.addAttribute("seat", seat.values());
+        } else {
+            model.addAttribute("seat", null);
+        }
+        model.addAttribute("tripId", tripId);
+        model.addAttribute("counter", Utils.count((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("seatStats", Utils.seatStats((Map<Integer, Seat>) session.getAttribute("seat")));
+        return "confirmseat";
+    }
+
+    @RequestMapping("/reservation/{tripId}/confirm-seat/user-information")
+    public String billPage(HttpSession session, @PathVariable("tripId") int tripId, Model model,
+            HttpServletRequest request, Authentication au) {
+        User u = this.userDetailService.getUsers(au.getName()).get(0);
+        Trip t = tripService.tripById(tripId);
         Map<Integer, Seat> seat = (Map<Integer, Seat>) session.getAttribute("seat");
         if (seat != null) {
             model.addAttribute("seat", seat.values());
@@ -87,6 +98,37 @@ public class BookingTicketController {
         }
         model.addAttribute("counter", Utils.count((Map<Integer, Seat>) session.getAttribute("seat")));
         model.addAttribute("seatStats", Utils.seatStats((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("tripId", tripId);
+        model.addAttribute("user", u);
+        model.addAttribute("trip", t);
         return "bill";
+    }
+    
+    @RequestMapping("/reservation/{tripId}/confirm-seat/user-information/success")
+    public String successPage(HttpSession session, @PathVariable("tripId") int tripId, Model model) {
+        Map<Integer, Seat> seat = (Map<Integer, Seat>) session.getAttribute("seat");
+        if (seat != null) {
+            model.addAttribute("seat", seat.values());
+        } else {
+            model.addAttribute("seat", null);
+        }
+        model.addAttribute("counter", Utils.count((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("seatStats", Utils.seatStats((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("tripId", tripId);
+        return "successpage";
+    }
+    
+    @RequestMapping("/reservation/{tripId}/confirm-seat/user-information/success-momo")
+    public String successPageMomo(HttpSession session, @PathVariable("tripId") int tripId, Model model) {
+        Map<Integer, Seat> seat = (Map<Integer, Seat>) session.getAttribute("seat");
+        if (seat != null) {
+            model.addAttribute("seat", seat.values());
+        } else {
+            model.addAttribute("seat", null);
+        }
+        model.addAttribute("counter", Utils.count((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("seatStats", Utils.seatStats((Map<Integer, Seat>) session.getAttribute("seat")));
+        model.addAttribute("tripId", tripId);
+        return "paybymomo";
     }
 }

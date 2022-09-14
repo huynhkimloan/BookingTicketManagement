@@ -6,6 +6,7 @@
 package com.qldv.service.impl;
 
 import com.qldv.pojo.Seat;
+import com.qldv.pojo.Ticketdetail;
 import com.qldv.repository.TicketDetailRepository;
 import com.qldv.service.TicketDetailService;
 import java.util.List;
@@ -49,5 +50,35 @@ public class TicketDetailServiceImpl implements TicketDetailService{
         }
         return false;
         
+    }
+
+    @Override
+    public int totalItem() {
+        return this.ticketDetailRepository.totalItem();
+    }
+
+    @Override
+    public Long sumItem() {
+        return this.ticketDetailRepository.sumItem();
+    }
+
+    @Override
+    public int countTicketsByTripId(int tripId) {
+        return this.ticketDetailRepository.countTicketsByTripId(tripId);
+    }
+
+    @Override
+    public List<Ticketdetail> getTickets(Map<String, String> params, int start, int limit) {
+        return this.ticketDetailRepository.getTickets(params, start, limit);
+    }
+
+    @Override
+    public List<Ticketdetail> getListNav(int start, int limit) {
+       return this.ticketDetailRepository.getListNav(start, limit);
+    }
+
+    @Override
+    public boolean editTicket(Ticketdetail t) {
+        return this.ticketDetailRepository.editTicket(t);
     }
 }

@@ -9,16 +9,20 @@ import com.qldv.pojo.Seat;
 import com.qldv.pojo.User;
 import com.qldv.service.CategoryService;
 import com.qldv.service.RouteService;
-import com.qldv.service.TripService;
+import com.qldv.service.UserService;
 import com.qldv.utils.Utils;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +39,12 @@ public class IndexController {
 
     @Autowired
     private CategoryService categoryService;
+    
+    @Autowired
+    private UserService userDetailService;
+    
+     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @ModelAttribute
     public void commonAttrs(Model model, HttpSession session) {
@@ -53,6 +63,13 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping("/user-profile")
+    public String userProfile(Authentication a, HttpServletRequest request) {
+        User u = this.userDetailService.getUsers(a.getName()).get(0);
+        request.getSession().setAttribute("user", u);
+        return "userprofile";
+    }
+    
 //    @RequestMapping ("/")
 //    public String index(Model model, @RequestParam(value = "kw", required = false, defaultValue = "") String kw, 
 //            @RequestParam(value = "kw1", required = false, defaultValue = "") String kw1,

@@ -5,7 +5,9 @@
  */
 package com.qldv.controllers;
 
+import com.qldv.pojo.Trip;
 import com.qldv.service.CommentService;
+import com.qldv.service.TripService;
 import com.qldv.service.UserService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,15 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TripService tripService;
     @RequestMapping("/comment/{tripId}")
     public String comment(Model model, @PathVariable("tripId") int tripId, @RequestParam(required = false) Map<String, String> params) {
         int page = Integer.parseInt(params.getOrDefault("page", "1"));
+        
         model.addAttribute("comments", this.commentService.getCommentsByTripId(tripId, page));
         model.addAttribute("commentCounter", this.commentService.countTrip(tripId));
+        model.addAttribute("trip", this.tripService.tripById(tripId));
         
         return "comment";
     }

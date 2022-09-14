@@ -8,7 +8,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
+<h2 class="text-center text-secondary">GÁN TÀI XẾ CHẠY CÁC CHUYẾN XE</h2>
 <c:url value="/admin/driverdetails/savedriver" var="save" />
 <form:form action="${save}" modelAttribute="driver" method="post">
     <div class="mb-3">

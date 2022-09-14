@@ -33,24 +33,24 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("admin/routes")
 public class RouteManageController {
-
+    
     @Autowired
     private RouteService routeService;
-
+    
     @GetMapping("/list")
     public String viewRouteList(ModelMap mm) {
         mm.addAttribute("listRoutes", routeService.getListNav(0, 8));
         mm.addAttribute("totalItem", Math.ceil(routeService.totalItem()) / 8);
         return "routes";
     }
-
+    
     @GetMapping("/list/{page}")
     public String viewRouteListByPage(ModelMap mm, @PathVariable("page") int page) {
         mm.addAttribute("listRoutes", routeService.getListNav((page - 1) * 8, 8));
         mm.addAttribute("totalItem", Math.ceil(routeService.totalItem()) / 8);
         return "routes";
     }
-
+    
     @GetMapping("/addroute")
     public String viewRouteNew(ModelMap mm) {
         mm.addAttribute("route", new Route());
@@ -62,21 +62,26 @@ public class RouteManageController {
         mm.addAttribute("route", routeService.findById(routeId));
         return "updateroute";
     }
-
+    
+    @GetMapping("/editroute/image/{routeId}")
+    public String viewRouteEditImage(ModelMap mm, @PathVariable("routeId") int routeId) {
+        mm.addAttribute("route", routeService.findById(routeId));
+        return "edit_image_route";
+    }
+    
     @PostMapping("/editroute")
     public String doUpdateRoute(ModelMap mm, @ModelAttribute(value = "route") Route route,
             BindingResult rs) {
         if (rs.hasErrors()) {
             return "updateroute";
         }
-
         if (this.routeService.editRoute(route) == true) {
             viewRouteList(mm);
             return "redirect:/admin/routes/list";
         }
         return "updateroute";
     }
-
+    
     @PostMapping("/saveroute")
     public String viewRouteSave(ModelMap mm, @ModelAttribute(value = "route") @Valid Route route,
             BindingResult rs, HttpServletRequest request) {
@@ -89,14 +94,14 @@ public class RouteManageController {
         }
         return "addroute";
     }
-
+    
     @RequestMapping("/deleteroute/{routeId}")
     public String viewRouteRemove(ModelMap mm, @PathVariable("routeId") int routeId) {
         routeService.deleteRoute(routeId);
         viewRouteList(mm);
         return "routes";
     }
-
+    
     @GetMapping("/search")
     public String search(@RequestParam Map<String, String> params, ModelMap mm) {
         if (params.get("kw").equals("")) {
@@ -106,5 +111,5 @@ public class RouteManageController {
         mm.addAttribute("totalItem", routeService.countItem(routeService.getRoutes(params, 0, 8)) / 8);
         return "routes";
     }
-
+    
 }

@@ -6,6 +6,7 @@
 package com.qldv.service;
 
 import com.qldv.pojo.Seat;
+import com.qldv.pojo.Ticketdetail;
 import com.qldv.pojo.User;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,12 @@ import java.util.Map;
  * @author Admin
  */
 public interface TicketDetailService {
+    
+    List<Ticketdetail> getTickets(Map<String, String> params, int start, int limit);
+
+    List<Ticketdetail> getListNav(int start, int limit);
+
+    boolean editTicket(Ticketdetail t);
 
     List<Object[]> findTicketsByTripId(int tripId);
 
@@ -25,4 +32,10 @@ public interface TicketDetailService {
     Object getUsers(String uname);
 
     boolean addReceipt(Map<Integer, Seat> seat, int uId, String method);
+    
+    int totalItem();
+    
+    Long sumItem();
+    
+    int countTicketsByTripId(int tripId);
 }

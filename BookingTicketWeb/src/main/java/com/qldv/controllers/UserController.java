@@ -41,8 +41,8 @@ public class UserController {
     @PostMapping("/register")
     public String registerProcess(Model model, @ModelAttribute(value = "user") @Valid User user, BindingResult result) {
         String errMsg = "";
-        
-            if (user.getPassword().isEmpty()
+
+        if (user.getPassword().isEmpty()
                 || !user.getPassword().equals(user.getConfirmPassword())) {
             errMsg = "Mật khẩu không khớp !";
             model.addAttribute("errMsg", errMsg);
@@ -53,23 +53,9 @@ public class UserController {
                 errMsg = "Đã có lỗi xảy ra!";
                 model.addAttribute("errMsg", errMsg);
             }
-            }
-        
+        }
+
         return "register";
-//        if (user.getPassword().equals(user.getConfirmPassword())) {
-//            if (this.userDetailService.addUser(user) == true) {
-//                return "redirect:/login";
-//            } 
-//            else {
-//                errMsg = "Đã có lỗi xảy ra!";
-//                return "register";
-//            }
-//        } 
-//        else {
-//            errMsg = "Mật khẩu không khớp !";
-//            model.addAttribute("errMsg", errMsg);
-//        }
-        
 
     }
 }

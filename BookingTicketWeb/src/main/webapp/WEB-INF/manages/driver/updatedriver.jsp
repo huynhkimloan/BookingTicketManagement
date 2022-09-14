@@ -8,75 +8,59 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
-<c:url value="/admin/drivers/editdriver" var="edit" />
-<form:form action="${edit}" modelAttribute="driver" method="post">
+<h2 class="text-center text-secondary">THAY ĐỔI THÔNG TIN TÀI XẾ</h2>
+<div id="error-message" class="text-center alert-danger"></div>
+
+<form:form id="formUser" modelAttribute="user" method="post">
     <div class="mb-3">
         <label class="form-label">Mã tài xế</label>
-        <form:input type="text" class="form-control" path="userIdDriver" readonly="true"/>
+        <form:input type="number" class="form-control" name="id" id="id" path="id" readonly="true"/>
     </div>
+    <div class="mb-3">
+        <label class="form-label">Tên tài xế</label>
+        <form:input type="text" class="form-control" path="name" id="name" name="name"/>
+        <div class="invalid-feedback" id="invalid-feedback-name"></div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <form:input type="text" class="form-control" path="email" id="email" name="email"/>
+        <div class="invalid-feedback" id="invalid-feedback-email"></div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Số điện thoại</label>
+        <form:input type="number" class="form-control" path="phone" id="phone" name="phone"/>
+        <div id="invalid-feedback-phone" class="invalid-feedback"></div>
+    </div>
+</form:form>
+<form:form id="formDriver" modelAttribute="driver">
     <div class="mb-3">
         <label class="form-label">CMND/CCCD</label>
-        <form:input type="text" class="form-control" path="identitycard" readonly="true"/>
+        <form:input type="number" class="form-control" name="identityCard" id="identityCard" path="identitycard"/>
+        <div  id="invalid-feedback-cmnd" class="invalid-feedback"></div>
     </div>
     <div class="mb-3">
-        <label class="form-label"></label>
-        <form:input type="text" class="form-control" path="tripId.coachname" readonly="true"/>
+        <label class="form-label">Địa chỉ</label>
+        <form:input type="text" class="form-control" name="address" id="address" path="address"/>
+        <div class="invalid-feedback" id="invalid-feedback-ad"></div>
     </div>
     <div class="mb-3">
-        <label class="form-label">Tài xế</label>
-        <form:select path="userIdDriver" class="form-select">
-            <c:forEach items="${users}" var="r">
-                <option value="${r.id}">${r.name}</option>
-            </c:forEach>
-        </form:select>
+        <label class="form-label">Ngày tháng năm sinh</label>
+        <form:input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth" path="dateofbirth"/>
+        <div class="invalid-feedback">
+            <spring:message code="notNullMsg" />
+        </div>
     </div>
     <div class="mb-3">
-        <label class="form-label">Vị trí</label>
-        <form:select path="driverrole" class="form-select">
-                <option>MainDriver</option>
-                <option>Driver</option>
-                <option>Assistant</option>
-        </form:select>
-    </div>
-    <div>
-        <input class="btn btn-warning" type="submit" value="Sửa"/>     
-        <a href="<c:url value="/admin/driverdetails/list" />" class="btn btn-info" type="button" data-toggle="tooltip" 
-           data-placement="top" title="Hủy"><i class="fas fa-undo"></i></a> 
+        <label class="form-label">Hạng bằng lái xe</label>
+        <form:input type="text" class="form-control" id="license" name="license" path="license"/>
+        <div class="invalid-feedback" id="invalid-feedback-license"></div>
     </div>
 </form:form>
-<form:form action="${edit}" modelAttribute="user" method="post">
-    <div class="mb-3">
-        <label class="form-label">Mã phân công</label>
-        <form:input type="text" class="form-control" path="id" readonly="true"/>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Mã tuyến</label>
-        <form:input type="text" class="form-control" path="tripId.id" readonly="true"/>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Tên tuyến</label>
-        <form:input type="text" class="form-control" path="tripId.coachname" readonly="true"/>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Tài xế</label>
-        <form:select path="userIdDriver" class="form-select">
-            <c:forEach items="${users}" var="r">
-                <option value="${r.id}">${r.name}</option>
-            </c:forEach>
-        </form:select>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Vị trí</label>
-        <form:select path="driverrole" class="form-select">
-                <option>MainDriver</option>
-                <option>Driver</option>
-                <option>Assistant</option>
-        </form:select>
-    </div>
-    <div>
-        <input class="btn btn-warning" type="submit" value="Sửa"/>     
-        <a href="<c:url value="/admin/driverdetails/list" />" class="btn btn-info" type="button" data-toggle="tooltip" 
-           data-placement="top" title="Hủy"><i class="fas fa-undo"></i></a> 
-    </div>
-</form:form>
+
+<div>
+    <button class="btn btn-warning" onclick="updateDriver()">Sửa</button>   
+    <a href="<c:url value="/admin/drivers/list" />" class="btn btn-info" type="button" data-toggle="tooltip" 
+       data-placement="top" title="Hủy"><i class="fas fa-undo"></i></a> 
+</div>
+
+<script src="<c:url value="/js/driver.js"/>"></script>
