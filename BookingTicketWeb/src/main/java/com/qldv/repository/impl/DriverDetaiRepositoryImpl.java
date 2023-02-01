@@ -121,4 +121,19 @@ public class DriverDetaiRepositoryImpl implements DriverDetailRepository {
         }
     }
 
+    @Override
+    public boolean deleteDriver(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        try {
+            Driverdetail p = session.get(Driverdetail.class, id);
+            session.delete(p);
+
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 }

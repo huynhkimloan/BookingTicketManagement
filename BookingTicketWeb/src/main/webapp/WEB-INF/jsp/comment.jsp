@@ -17,18 +17,19 @@
 </div>
 
 
+
 <div class="row" style="margin-top: 30px; margin-left: 25%">
     <div class="col-md-8 col-xs-6" style="padding:10px; margin: 10px;">
         <div class="card">
             <img style=" height: 300px;" class=" img1 img-fluid card-header" src="<c:url value="${trip.image}"/>" alt="${trip.coachname}" />                
             <div class="card-body ">
-                <h2> <i class="fa-solid fa-bus"> ${trip.routeId.startingpoint} - ${trip.routeId.destination}</i> </h2>
+                <h2 style="font-family: 'Cambria', sans-serif;"> <i class="fa-solid fa-bus"></i> ${trip.routeId.startingpoint} - ${trip.routeId.destination} </h2>
                 <hr>                   
                 <h5><i class="fa-solid fa-calendar-check"></i> Ngày khởi hành: <fmt:formatDate pattern = "dd/MM/yyyy" value = "${trip.departureday}" /></h5>
 
                 <div style="display: flex; margin-top: 10px; ">
-                    <h5><i class="fa-solid fa-hourglass-start"></i>Thời gian đi <fmt:formatDate type = "time" value = "${trip.departuretime}" /> </h5>  
-                    <h5 style="margin-left: 150px;"><i class="fa-solid fa-hourglass-end"></i> Thời gian đến <fmt:formatDate type = "time" value = "${trip.arrivaltime}" /></h5>
+                    <h5><i class="fa-solid fa-hourglass-start"></i> Thời gian đi: <fmt:formatDate type = "time" value = "${trip.departuretime}" /> </h5>  
+                    <h5 style="margin-left: 100px;"><i class="fa-solid fa-hourglass-end"></i> Thời gian đến <fmt:formatDate type = "time" value = "${trip.arrivaltime}" /></h5>
                 </div>                    
             </div>
         </div>
@@ -72,7 +73,7 @@
     <form class="form-block" onsubmit="addComment(event, ${tripId})">
         <div class="row" style="width:80%; margin-left: 13.5%">
             <div class="col-xs-12">
-<div class="form-group">
+                <div class="form-group">
                     <textarea class="form-input" id="commentId" placeholder="Bình luận của bạn là..."></textarea>
                 </div>
             </div>
@@ -90,7 +91,7 @@
 <div>
     <ul class="pagination">
         <c:forEach begin="1" end="${Math.ceil(commentCounter/10)}" var="a">
-            <li class="page-item"><a class="page-link" href="<c:url value="/comment/${tripId}/${trip.id}" />?page=${a}">${a}</a></li>
+            <li class="page-item"><a class="page-link" href="<c:url value="/comment/${tripId}" />?page=${a}">${a}</a></li>
             </c:forEach>
     </ul>
 </div>
@@ -99,7 +100,7 @@
     window.onload = function () {
         let dates = document.getElementsByClassName("comment-date");
         for (let  i = 0; i < dates.length; i++)
-             dates[i].innerText ="Ngày tạo: " + moment(dates[i].innerText).fromNow();
+            dates[i].innerText = "Ngày tạo: " + moment(dates[i].innerText).fromNow();
     };
 </script>
 

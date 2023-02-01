@@ -89,13 +89,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        Cấu hình khi ngoại lệ
         http.exceptionHandling().accessDeniedPage("/login?accessDenied");
 //        Phân quyền
-        http.authorizeRequests().antMatchers("/").permitAll()
-               .antMatchers("/admin/**").access("hasAuthority('Admin')");
-         http.authorizeRequests().antMatchers("/tickets/**").access("hasAnyAuthority('Employee', 'Admin')");
+        http.authorizeRequests().antMatchers("/").permitAll();
+        http.authorizeRequests().antMatchers("/admin/**").access("hasAuthority('Admin')");
+        http.authorizeRequests().antMatchers("/tickets/**").access("hasAnyAuthority('Employee', 'Admin')");
+        http.authorizeRequests().antMatchers("/ad/driverdetails/list").access("hasAnyAuthority('Driver', 'Admin')");
           
-        
-//        .antMatchers("/**/pay")
-//                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
         http.csrf().disable();
     }
     

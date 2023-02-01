@@ -121,13 +121,15 @@
                 <img style=" height: 250px;" class=" img1 img-fluid card-header" src="<c:url value="${route.image}"/>" alt="${route.routename}" />                
 
                 <div class="card-body ">
-                    <h3 ><i class="fa-solid fa-map-location-dot">  ${route.startingpoint} - ${route.destination}</i></h3>
+                    <h3 style="font-family: 'Cambria', sans-serif;"><i class="fa-solid fa-map-location-dot"></i> ${route.startingpoint} - ${route.destination}</h3>
                     <hr>
                     <diV style="display: flex;" class="show-p">
 
-                        <g><i class="fa-solid fa-location-dot" > ${route.stretch}km </i></g>
-                        <p><i class="fa-solid fa-clock"> ${route.time}h </i></p>
-                        <p class="product-carousel-price"><small> <i class="fa-solid fa-money-bill-wave">  ${route.price} 000 VNĐ</i></small></p> 
+                        <g style="font-family: 'Cambria', sans-serif; font-weight: bold"><i class="fa-solid fa-location-dot" ></i> ${route.stretch} km </g>
+                        <p style="font-family: 'Cambria', sans-serif; font-weight: bold"><i class="fa-solid fa-clock"></i> ${route.time} h </p>
+                        <p class="product-carousel-price" style="font-family: 'Cambria', sans-serif; font-weight: bold">
+                                <i class="fa-solid fa-money-bill-wave"></i> <fmt:formatNumber 
+                                    value="${route.price}" maxFractionDigits="3" type = "number" /> VNĐ</p> 
                     </diV>
                     <a href="<c:url value="/trip/${route.id}"/>"  id="priceInfo" class="btn btn-dark action" style="width: 100%; font-size: 20px;">Xem chi tiết</a>
                 </div>

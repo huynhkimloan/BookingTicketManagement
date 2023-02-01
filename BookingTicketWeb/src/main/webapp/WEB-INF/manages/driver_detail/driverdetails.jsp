@@ -12,7 +12,7 @@
 <h1 class="text-center text-danger">DANH SÁCH PHÂN CÔNG TÀI XẾ</h1>
 
 <div>
-    <c:url value="/admin/driverdetails/search" var="search" />
+    <c:url value="/ad/driverdetails/search" var="search" />
     <form:form action="${search}" method="get">
         <div class="input-group">
             <div class="form-outline">
@@ -34,7 +34,7 @@
 <div class="mailbox-border" style="float: right">
     <div class="float-left">
         <div class="btn btn_1 mrg5R">
-            <c:url value="/admin/driverdetails/adddriver" var="add" />
+            <c:url value="/ad/driverdetails/adddriver" var="add" />
             <a style="color: green" title="Thêm" href="${add}"><i class="fa fa-plus"> </i></a>
         </div>
         <div class="clearfix"> </div>
@@ -48,7 +48,9 @@
             <th>Chuyến đi</th>
             <th>Tên tài xế</th>
             <th>Vị trí</th>
-            <th>Chức năng</th>
+            <c:if test="${user.userrole=='Admin'}">
+            <th colspan="2">Chức năng</th>
+            </c:if>
         </tr>
     </thead>
     <tbody> 
@@ -58,11 +60,18 @@
                 <td>${r.tripId.coachname}</td>
                 <td>${r.userIdDriver.user.name}</td>
                 <td>${r.driverrole}</td>
+                <c:if test="${user.userrole=='Admin'}">
                 <td>
-                    <c:url value="/admin/driverdetails/editdriver/${r.id}" var="edit" />
+                    <c:url value="/ad/driverdetails/editdriver/${r.id}" var="edit" />
                     <a href="${edit}" style="color: #7c4c02"
                        title="Sửa" style="margin-right: 5px"><i class="fa fa-edit"></i></a>
                 </td>
+                <td>
+                    <c:url value="/ad/driverdetails/deletedriver/${r.id}" var="delete" />
+                    <a href="${delete}" style="color: tomato"
+                       title="Xóa"><i class="bi bi-trash"></i></a>
+                </td>
+                </c:if>
             </tr>
         </c:forEach>
     </tbody>
@@ -70,7 +79,7 @@
 <nav aria-label="Page navigation example" style="float: right">
     <ul class="pagination">
         <c:forEach var="i" begin="0" end="${totalItem}">
-            <c:url value="/admin/driverdetails/list/${i+1}" var="action" />
+            <c:url value="/ad/driverdetails/list/${i+1}" var="action" />
             <li class="page-item"><a class="page-link" href="${action}"><c:out value="${i+1}"/></a></li>
         </c:forEach>
     </ul>

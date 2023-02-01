@@ -41,4 +41,6 @@ public interface TripRepository {
     int totalItem();
 
     Trip tripById(int tripId);
+    
+    List<Trip> tripComment();
 }

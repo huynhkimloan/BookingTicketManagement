@@ -14,11 +14,15 @@ and open the template in the editor.
 
 /*REGISTER*/
 div.register {
-    width: 70%; 
+    width: 50%; 
 }
 
 div.register .form-group{
     margin: 15px 15px 15px 15px;
+}
+
+div.register form{
+    background-color: #f5f5f5;
 }
 
 div.register > h1{
@@ -304,7 +308,7 @@ input.invalid {
 #search-search {
     position: relative;
 
-    animation: runSearch  5s linear 2s infinite alternate ;
+    /*animation: runSearch  5s linear 2s infinite alternate ;*/
 }
 @keyframes runSearch {
     0%   { left:0px; top:0px;}
@@ -467,7 +471,7 @@ div.infomation > div {
 /*    background-image:linear-gradient(to right, white,   #c9ffdb, white,   #c9ffdb);*/
 }
 
-#departureday {
+#departureday1 {
     margin-left: 20px;
     width: 30%;
     margin-top: 35px;
@@ -494,8 +498,6 @@ div.infomation > div {
     transform: rotate(180deg);
 
 }
-
-/*COMMENT*/
 
 /*COMMENT*/
 .divcomment {
@@ -796,3 +798,18 @@ body{
 .formatP{
     font-size: 17px;
 }
+
+/*STATISTICS*/
+
+.search-sec{
+    margin-top: 30px;
+    padding: 2rem;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 30px;
+}
+
+/*#table-stats {
+    width: 40%;
+    margin-left: 30%;
+    border: solid;
+}*/

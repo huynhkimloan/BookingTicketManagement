@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,10 +41,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
-//    @Override
-//    public User getUserById(int id) {
-//       return this.userRepository.getUserById(id);
-//    }
     @Override
     @Transactional
     public boolean addUser(User user) {
@@ -66,11 +60,10 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-//
+
     @Override
     public List<User> getUsers(String username) {
         return this.userRepository.getUsers(username);
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

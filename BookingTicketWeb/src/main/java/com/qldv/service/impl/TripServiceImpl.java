@@ -103,4 +103,9 @@ public class TripServiceImpl implements TripService {
         return this.tripRepository.getTrips();
     }
 
+    @Override
+    public List<Trip> tripComment() {
+        return this.tripRepository.tripComment();
+    }
+
 }

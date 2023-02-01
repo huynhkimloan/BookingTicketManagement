@@ -58,7 +58,7 @@
     <div id="search-departureday">
         <div style="width: 100%;display: flex; margin-top: 20px;">
             <label style="width: 20%; font-size:20px; margin-left: 80px; margin-top: 45px;">Chọn ngày đi  </label>
-            <input type="date" name="kw" id="departureday"  class="form-control" /> 
+            <input type="date" name="kw" id="departureday1"  class="form-control" /> 
 
         </div>  
         <input type="submit" value="Tìm" id="submitdepartureday" class="btn btn-dark"/>

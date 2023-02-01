@@ -22,6 +22,8 @@ public interface DriverDetailRepository {
     boolean editDriver(Driverdetail d);
     
     boolean addDriver(Driverdetail d);
+    
+    boolean deleteDriver(int id);
 
     int totalItem();
 

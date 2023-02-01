@@ -41,4 +41,6 @@ public interface TripService {
     int totalItem();
 
     Trip tripById(int tripId);
+    
+    List<Trip> tripComment();
 }

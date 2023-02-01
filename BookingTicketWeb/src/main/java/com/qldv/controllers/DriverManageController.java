@@ -79,7 +79,7 @@ public class DriverManageController {
             return "redirect:/admin/drivers/list";
         }
         mm.addAttribute("listDrivers", driverService.getDrivers(params, 0, 8));
-        mm.addAttribute("totalItem", routeService.totalItem() / 8);
+        mm.addAttribute("totalItem", routeService.countItem(driverService.getDrivers(params, 0, 8)) / 8);
         return "drivers";
     }
 }

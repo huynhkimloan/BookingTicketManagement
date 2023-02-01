@@ -54,7 +54,7 @@
                     <i class="fas fa-user-friends"></i> <span class="ms-1 d-none d-sm-inline">Nhân viên</span> </a>
             </li>
             <li>
-                <c:url value="/admin/driverdetails/list" var="driverdt" />
+                <c:url value="/ad/driverdetails/list" var="driverdt" />
                 <a href="${driverdt}" class="nav-link px-0 align-middle">
                     <i class="fas fa-user-edit"></i> <span class="ms-1 d-none d-sm-inline">Gán tài xế</span></a>
             </li>

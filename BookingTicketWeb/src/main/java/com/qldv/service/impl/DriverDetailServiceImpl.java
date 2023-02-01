@@ -52,4 +52,9 @@ public class DriverDetailServiceImpl implements DriverDetailService {
     public boolean addDriver(Driverdetail d) {
         return this.driverDetailRepository.addDriver(d);
     }
+
+    @Override
+    public boolean deleteDriver(int id) {
+        return this.driverDetailRepository.deleteDriver(id);
+    }
 }

@@ -49,8 +49,8 @@
                         <h5 class="alert alert-secondary">Phương thức thanh toán</h5> 
                         <div class="row" style="margin-right: 7px">
                             <div class="col-sm-6 form-check" style="width: 50%">
-                                <a onclick="pay(${tripId}, 'Momo')">
-                                    <div class="col" >
+                                <a href="<c:url value="/reservation/${tripId}/confirm-seat/user-information/success-momo"/>">
+                                    <div class="col">
                                         <span class="btn border border-warning">
                                             <img class="img-fluid icon" src="<c:url value="/img/momo.jpg"/>" alt="Momo" />
                                             <p style="margin-bottom: 0">Ví MoMo</p>

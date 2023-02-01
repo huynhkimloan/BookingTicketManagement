@@ -73,7 +73,7 @@ public class Route implements Serializable {
     @Column(name = "price")
     private long price;
     @Column(name = "specialprice")
-    private Long specialprice;
+    private Float specialprice;
     @Size(max = 150)
     @Column(name = "image")
     private String image;
@@ -145,13 +145,7 @@ public class Route implements Serializable {
         this.price = price;
     }
 
-    public Long getSpecialprice() {
-        return specialprice;
-    }
-
-    public void setSpecialprice(Long specialprice) {
-        this.specialprice = specialprice;
-    }
+    
 
     public String getImage() {
         return image;
@@ -249,6 +243,16 @@ public class Route implements Serializable {
      */
     public void setTime(int time) {
         this.time = time;
+    }
+
+   
+    public Float getSpecialprice() {
+        return specialprice;
+    }
+
+    
+    public void setSpecialprice(Float specialprice) {
+        this.specialprice = specialprice;
     }
 
     /**

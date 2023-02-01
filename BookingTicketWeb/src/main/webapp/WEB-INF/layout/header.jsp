@@ -15,22 +15,31 @@
         </button>
         <div class="collapse navbar-collapse" id="mynavbar">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item" style="margin-left: 30px">
+                <li class="nav-item" style="margin-left: 10px">
                     <c:url value="/" var="action" />
                     <a class="nav-link" href="${action}">Trang chủ</a>
                 </li>
+                <c:if test="${currentUser.userrole == 'Driver'}">
+                <li class="nav-item">
+                    <a class="nav-link text-secondary" href="<c:url value="/ad/driverdetails/list" />">Phân công</a>
+                </li>
+                </c:if>
+                <c:if test="${currentUser.userrole == 'Admin'}">
                 <li class="nav-item">
                     <a class="nav-link text-secondary" href="<c:url value="/admin" />">Quản trị</a>
                 </li>
+                </c:if>
+                <c:if test="${currentUser.userrole == 'Employee'}">
                 <li class="nav-item">
                     <a class="nav-link text-success" href="<c:url value="/tickets/list" />">Quản lý vé</a>
                 </li>
+                </c:if>
                 <li class="nav-item">
                     <a class="nav-link" href="tel:0222.33.44.55"><i class="fas fa-phone-alt callNumber"></i> 0222.33.44.55</a>
                 </li>
             </ul>
-            <ul class="navbar-nav me-auto" style="margin-left:250px"> 
-                <!--    Khi đăng nhập thất bại hiện ra link login và cái tên-->
+            <ul class="navbar-nav me-auto" style="margin-left:550px"> 
+                <!--    Khi đăng nhập thất bại hiện ra link login -->
                 <c:if test="${pageContext.request.userPrincipal.name == null}">
                     <li class="nav-item">
                         <a class="nav-link text-success" href="<c:url value="/login" />">
@@ -43,7 +52,8 @@
                         </a>
                     </li>
                 </c:if>
-                <!-- Ngược lại thi hiện ra logout và tên username -->
+                    
+                <!-- Ngược lại thì hiện ra logout và tên -->
                 <c:if test="${pageContext.request.userPrincipal.name != null}">
                     <li class="nav-item">
                         <!--<a href="<c:url value="/"/>" class="nav-link text-info">-->
@@ -68,14 +78,9 @@
                         <c:if test="${currentUser.avatar == null}">
                             <i class="fa fa-user" aria-hidden="true"></i>
                         </c:if> 
-                        <!--${currentUser.name}-->
-                        <!--</a>-->
+                       
                     </li>
-                    <!--                    <li class="nav-item">
-                                            <a class="nav-link text-danger" href="<c:url value="/logout" />">
-                                                <i class="fa-solid fa-user-minus" aria-hidden="true"></i>  Đăng xuất
-                                            </a>
-                                        </li>-->
+                    
                 </c:if>
             </ul>
 

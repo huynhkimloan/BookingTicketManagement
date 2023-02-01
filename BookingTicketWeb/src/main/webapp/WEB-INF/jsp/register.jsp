@@ -10,8 +10,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>--%>
 <div class="container register">
-    <h1 class="text-center text-danger">ĐĂNG KÝ</h1><!-- comment -->
-    <p class="text-center text-primary">Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!</p>
+    <h1 class="text-center" style="color: #dc3545">ĐĂNG KÝ</h1>
+    <p class="text-center" style="color: #3f51b5">Vui lòng điền đầy đủ thông tin để đăng ký tài khoản!</p>
     <c:if test="${errMsg != null}">
         <div class="alert alert-danger">${errMsg}</div> 
     </c:if>
@@ -66,7 +66,7 @@
                 <input type="submit" value="Đăng ký" class="btn btn-danger" />
             </div>
             <div class="form-group">
-                <a class="btn btn-info" href="<c:url value="/"/>">Trở lại</a>
+                <a class="btn btn-info" href="<c:url value="/login"/>">Đăng nhập</a>
             </div>
         </div>
     </form:form>

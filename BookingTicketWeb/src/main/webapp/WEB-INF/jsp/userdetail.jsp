@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="container">
     <div class="main-body">
@@ -59,11 +60,11 @@
                                                         <label for="name">Tên đăng nhập: </label>
                                                         <input type="text" id="username" name="username" class="form-control" value="${user.username}"/>
                                                     </div>
-<!--                                                    <div class="form-group mb-3">
-                                                        <label for="password" class="form-label">Mật khẩu hiện tại</label>
-                                                        <input type="password" required name="passwordO" id="passwordO" class="form-control" value="${pass}""/>
-                                                        <div id="invalid-feedback-password" class="invalid-feedback"></div>
-                                                    </div>-->
+                                                    <!--                                                    <div class="form-group mb-3">
+                                                                                                            <label for="password" class="form-label">Mật khẩu hiện tại</label>
+                                                                                                            <input type="password" required name="passwordO" id="passwordO" class="form-control" value="${pass}""/>
+                                                                                                            <div id="invalid-feedback-password" class="invalid-feedback"></div>
+                                                                                                        </div>-->
                                                     <div class="form-group mb-3">
                                                         <label for="password" class="form-label">Mật khẩu mới</label>
                                                         <input type="password" required name="passwordN" id="passwordN" class="form-control" placeholder="Nhập mật khẩu mới..."/>
@@ -135,8 +136,8 @@
                                     <h6 class="mb-0">Ngày sinh</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    ${user.employee.dateofbirth}
-                                    ${user.driver.dateofbirth}
+                                    <fmt:formatDate pattern = "dd/MM/yyyy" value = "${user.employee.dateofbirth}" />
+                                    <fmt:formatDate pattern = "dd/MM/yyyy" value = "${user.driver.dateofbirth}" />
                                 </div>
                             </div>
                             <hr>
@@ -274,10 +275,12 @@
     function myFunction() {
         var x = document.getElementById("passwordN");
         var z = document.getElementById("confirmPassword");
-        if (x.type === "password"||z.type === "password") {
-          x.type = "text";z.type = "text"; 
+        if (x.type === "password" || z.type === "password") {
+            x.type = "text";
+            z.type = "text";
         } else {
-          x.type = "password";z.type = "password";
+            x.type = "password";
+            z.type = "password";
         }
-}
+    }
 </script>

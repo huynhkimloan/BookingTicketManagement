@@ -5,17 +5,13 @@
  */
 package com.qldv.repository.impl;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.qldv.pojo.Passengercar;
 import com.qldv.pojo.Route;
 import com.qldv.pojo.Trip;
 import com.qldv.pojo.User;
-import com.qldv.repository.RouteRepository;
 import com.qldv.repository.TripRepository;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +38,7 @@ public class TripRepositoryImpl implements TripRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactory;
 
-    @Autowired
-    private RouteRepository routeRepository;
-
-    @Autowired
-    private Cloudinary cloudinary;
+    
 
     @Override
     public List<Trip> getDeparturedayTrips(Date kw, int id) {
@@ -91,13 +83,8 @@ public class TripRepositoryImpl implements TripRepository {
         CriteriaQuery<Trip> query = builder.createQuery(Trip.class);
         Root root = query.from(Trip.class);
         query = query.select(root);
-
-//        if (kw != null && !kw.isEmpty()) {
-//            Predicate p1 = builder.like(root.get("seatrow").as(String.class),
-//                    String.format("%%%s%%", kw));
-//            query = query.where(p1);
-//        }
         Query q = session.createQuery(query);
+        
         return q.getResultList();
     }
 
@@ -231,6 +218,24 @@ public class TripRepositoryImpl implements TripRepository {
         Root root = query.from(Trip.class);
         query = query.select(root);
         query = query.where(builder.equal(root.get("active"), 1));
+
+        Query q = session.createQuery(query);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<Trip> tripComment() {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Trip> query = builder.createQuery(Trip.class);
+        Root rootT = query.from(Trip.class);
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        long s = System.currentTimeMillis();
+        
+        Date day = new Date(s);
+        query = query.select(rootT);
+        Predicate p1 = builder.lessThanOrEqualTo(rootT.get("departureday"),day);
+        query = query.where(p1);
 
         Query q = session.createQuery(query);
         return q.getResultList();

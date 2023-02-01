@@ -29,7 +29,7 @@
 <!-- Tab panes -->
 <div class="tab-content">
     <!--Thống kê mật độ chuyến đi theo tuyến-->
-    <div class="tab-pane container active" id="density">
+    <div class="tab-pane container fade" id="density">
         <div class="row">
             <h4 class="text-center text-secondary mt-4"> Bảng số liệu thống kê </h4>
             <table class="table">
@@ -61,7 +61,7 @@
     </div>
 
     <!--Thống kê doanh thu theo chuyến--> 
-    <div class="tab-pane container fade " id="turnover">
+    <div class="tab-pane container  active" id="turnover">
         <div class="row">
             <form action="">
                 <div class="form-group">
@@ -89,13 +89,13 @@
                     <tr>
                         <td>${b[0]}</td>
                         <td>${b[1]}</td>
-                        <td>${b[2]} VNĐ</td>
+                        <td><fmt:formatNumber value="${b[2]}" maxFractionDigits="3" type = "number" /> VNĐ</td>
                     </tr>
                 </c:forEach>
             </table>
             <h4 class="text-center text-danger"> Thống kê theo dạng biểu đồ </h4>
-            <div>
-                <canvas id="myTripsturnovertatisticsChart"></canvas>
+            <div style="width:50%; margin-left: 30%; " >
+                <canvas id="myTripsturnovertatisticsChart" ></canvas>
             </div>
             <script>
                 let tripturnoverLabels = [], tripturnoverInfo = []

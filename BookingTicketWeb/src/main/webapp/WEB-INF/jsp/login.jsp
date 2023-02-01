@@ -18,7 +18,7 @@
     <p class="indigo-text">Vui lòng điền đầy đủ thông tin đăng nhập của bạn!</p>
 
       <div class="container">
-        <div class="z-depth-1 grey lighten-4 row"style="margin: 0; display: inline-block; padding: 10px 30px 0px 30px; border: 1px solid #EEE;">
+        <div class="z-depth-1 grey lighten-4 row" style="margin: 0; display: inline-block; padding: 10px 30px 0px 30px; border: 1px solid #EEE;">
 
             <c:if test="${param.error != null}">
                 <div class="alert alert-danger">Đăng nhập không thành công!</div>

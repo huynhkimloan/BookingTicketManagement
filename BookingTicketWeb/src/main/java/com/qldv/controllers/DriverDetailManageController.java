@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Admin
  */
 @Controller
-@RequestMapping("admin/driverdetails")
+@RequestMapping("ad/driverdetails")
 public class DriverDetailManageController {
 
     @Autowired
@@ -49,9 +50,11 @@ public class DriverDetailManageController {
     private TripService tripService;
 
     @GetMapping("/list")
-    public String viewDriverList(ModelMap mm) {
+    public String viewDriverList(ModelMap mm, Authentication a, HttpServletRequest request) {
         mm.addAttribute("listDrivers", driverDetailService.getListNav(0, 8));
         mm.addAttribute("totalItem", driverDetailService.totalItem() / 8);
+        User u = this.userService.getUsers(a.getName()).get(0);
+        request.getSession().setAttribute("user", u);
         return "driverdetails";
     }
 
@@ -78,12 +81,13 @@ public class DriverDetailManageController {
     }
 
     @PostMapping("/editdriver")
-    public String doUpdateDriver(ModelMap mm, @ModelAttribute(value = "driver") Driverdetail driverdt, BindingResult rs) {
+    public String doUpdateDriver(ModelMap mm, @ModelAttribute(value = "driver") Driverdetail driverdt, 
+            BindingResult rs, Authentication a, HttpServletRequest request) {
         if (rs.hasErrors()) {
             return "updatedriverdt";
         }
         if (this.driverDetailService.editDriver(driverdt) == true) {
-            viewDriverList(mm);
+            viewDriverList(mm, a, request);
             return "redirect:/admin/driverdetails/list";
         }
         return "updatedriverdt";
@@ -91,15 +95,23 @@ public class DriverDetailManageController {
     
     @PostMapping("/savedriver")
     public String viewRouteSave(ModelMap mm, @ModelAttribute(value = "driver") @Valid Driverdetail driver,
-            BindingResult rs) {
+            BindingResult rs, Authentication a, HttpServletRequest request) {
         if (rs.hasErrors()) {
             return "adddriverdt";
         }
         if (this.driverDetailService.addDriver(driver) == true) {
-            viewDriverList(mm);
+            viewDriverList(mm, a, request);
             return "redirect:/admin/driverdetails/list";
         }
         return "adddriverdt";
+    }
+    
+    @RequestMapping("/deletedriver/{driverId}")
+    public String viewDriverRemove(ModelMap mm, @PathVariable("driverId") int driverId,
+            Authentication a, HttpServletRequest request) {
+        driverDetailService.deleteDriver(driverId);
+        viewDriverList(mm, a, request);
+        return "driverdetails";
     }
 
     @GetMapping("/search")
@@ -108,7 +120,7 @@ public class DriverDetailManageController {
             return "redirect:/admin/driverdetails/list";
         }
         mm.addAttribute("listDrivers", driverDetailService.getDrivers(params, 0, 8));
-        mm.addAttribute("totalItem", routeService.totalItem() / 8);
+        mm.addAttribute("totalItem", routeService.countItem(driverDetailService.getDrivers(params, 0, 8)) / 8);
         return "driverdetails";
     }
 }

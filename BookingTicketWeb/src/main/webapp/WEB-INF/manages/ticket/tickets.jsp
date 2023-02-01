@@ -40,8 +40,8 @@
             <th style="width: 80px">Phương thức trả</th>
             <th style="width: 90px">Xe</th>
             <th style="width: 150px">Chuyến</th>
-            <th>Ngày mua</th>
-            <th>Tổng tiền</th>
+            <th style="width: 150px">Ngày mua</th>
+            <th style="width: 100px">Tổng tiền</th>
             <th style="width: 15px">Chức năng</th>
         </tr>
     </thead>

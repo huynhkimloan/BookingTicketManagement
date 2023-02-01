@@ -31,19 +31,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TripContronller {
 
-   @Autowired
+    @Autowired
     private TripService tripService;
-    @Autowired
-    private RouteService routeService;
-    @Autowired
-    private TicketDetailService ticketDetailService;
+    
 
     @RequestMapping("/trip/{routeId}")
     public String trip(Model model, @PathVariable("routeId") int routeId, @ModelAttribute(value = "trip") Trip trip, @RequestParam(required = false) Map<String, String> params) {
        
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-//        int tripId = Integer.parseInt(params.get("tripId"));
-//        int tripId = Integer.parseInt(params.get("trip"));
+        
         Date fromDate = null;
         String from = params.getOrDefault("kw", null);
         if(from != null)
@@ -52,8 +48,9 @@ public class TripContronller {
         } catch (ParseException ex) {
             Logger.getLogger(TripContronller.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         model.addAttribute("tripDeparturedays", this.tripService.getDeparturedayTrips(fromDate, routeId));
-//        model.addAttribute("countSeat", this.ticketDetailService.countSeat(tripId));
+        
         return "trip";
     }
     

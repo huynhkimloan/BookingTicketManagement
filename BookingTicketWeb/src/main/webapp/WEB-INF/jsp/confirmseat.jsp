@@ -39,7 +39,7 @@
                                 <tr id="s-${c.id}">
                                     <td class="formatP">${c.id}</td>
                                     <td class="formatP">${c.name}</td>
-                                    <td class="formatP">${c.price}</td>
+                                    <td class="formatP"><fmt:formatNumber value="${c.price}" maxFractionDigits="3" type = "number" /></td>
                                     <td class="formatP">
                                         <a href="javascrip:;" style="color: tomato" onclick="deleteSeat(${c.id})" 
                                            title="Xóa"><i class="fa-solid fa-trash-can"></i></a>
@@ -59,12 +59,17 @@
                         <!--<div style="float: right"><button class="btn btn-warning" onclick="pay()">Thanh toán</button></div>-->
 
                     </div>
+                <c:if test="${counter==0}">
+                        <p class="text-danger formatP"><i>Vui lòng quay lại đặt ghế mới!</i></p>
+                    </c:if>
                 </c:if>
                 <div style="overflow:auto;" id="nextprevious">
                     <div style="float:right;"> 
                         <a type="button" id="prevBtn" class="button btn btn-secondary" href="<c:url value="/reservation/${tripId}"/>">Quay lại</a> 
-                        <a type="button" id="nextBtn" class="button btn btn-success"
-                           href="<c:url value="/reservation/${tripId}/confirm-seat/user-information"/>"> Tiếp tục</a> 
+                        <c:if test="${counter!=0}">
+                            <a type="button" id="nextBtn" class="button btn btn-success"
+                               href="<c:url value="/reservation/${tripId}/confirm-seat/user-information"/>"> Tiếp tục</a> 
+                        </c:if>
                     </div>
                 </div>
             </form>

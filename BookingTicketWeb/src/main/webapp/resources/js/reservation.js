@@ -104,6 +104,7 @@ function deleteSeat(seatId) {
         }).then(function (res) {
             return res.json();
         }).then(function (data) {
+            location.reload();
             let counter = document.getElementById("count");
             counter.innerHTML = data.counter;
             let amount = document.getElementById("amount");
@@ -111,8 +112,8 @@ function deleteSeat(seatId) {
         });
     }
 
-    let s = document.getElementById(`s-${seatId}`);
-    s.style.display = "none";
+//    let s = document.getElementById(`s-${seatId}`);
+//    s.style.display = "none";
 
 }
 

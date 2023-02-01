@@ -13,7 +13,6 @@ import com.qldv.service.UserService;
 import com.qldv.utils.Utils;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -69,12 +67,5 @@ public class IndexController {
         request.getSession().setAttribute("user", u);
         return "userprofile";
     }
-    
-//    @RequestMapping ("/")
-//    public String index(Model model, @RequestParam(value = "kw", required = false, defaultValue = "") String kw, 
-//            @RequestParam(value = "kw1", required = false, defaultValue = "") String kw1,
-//            @RequestParam(value = "kw", required = false, defaultValue = "1") int page) {
-//        model.addAttribute("routes", this.routeService.getRoutes(kw, kw1, page));
-//        return "index";
-//    }
+
 }

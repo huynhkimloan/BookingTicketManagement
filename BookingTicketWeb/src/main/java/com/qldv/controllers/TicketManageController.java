@@ -38,15 +38,15 @@ public class TicketManageController {
     
     @GetMapping("/list")
     public String viewTicketList(ModelMap mm) {
-        mm.addAttribute("listTickets", ticketDetailService.getListNav(0, 8));
-        mm.addAttribute("totalItem", Math.ceil(ticketDetailService.totalItem()) / 8);
+        mm.addAttribute("listTickets", ticketDetailService.getListNav(0, 20));
+        mm.addAttribute("totalItem", Math.ceil(ticketDetailService.totalItem()) / 20);
         return "tickets";
     }
     
     @GetMapping("/list/{page}")
     public String viewTicketListByPage(ModelMap mm, @PathVariable("page") int page) {
-        mm.addAttribute("listTickets", ticketDetailService.getListNav((page - 1) * 8, 8));
-        mm.addAttribute("totalItem", Math.ceil(ticketDetailService.totalItem()) / 8);
+        mm.addAttribute("listTickets", ticketDetailService.getListNav((page - 1) * 20, 20));
+        mm.addAttribute("totalItem", Math.ceil(ticketDetailService.totalItem()) / 20);
         return "tickets";
     }
     
@@ -55,8 +55,8 @@ public class TicketManageController {
         if (params.get("kw").equals("")) {
             return "redirect:/tickets/list";
         }
-        mm.addAttribute("listTickets", ticketDetailService.getTickets(params, 0, 8));
-        mm.addAttribute("totalItem", routeService.countItem(ticketDetailService.getTickets(params, 0, 8)) / 8);
+        mm.addAttribute("listTickets", ticketDetailService.getTickets(params, 0, 20));
+        mm.addAttribute("totalItem", routeService.countItem(ticketDetailService.getTickets(params, 0, 20)) / 20);
         return "tickets";
     }
 }

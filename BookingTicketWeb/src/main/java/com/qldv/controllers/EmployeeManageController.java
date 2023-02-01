@@ -81,7 +81,7 @@ public class EmployeeManageController {
             return "redirect:/admin/employees/list";
         }
         mm.addAttribute("listEmployees", employeeService.getEmployees(params, 0, 8));
-        mm.addAttribute("totalItem", routeService.totalItem() / 8);
+        mm.addAttribute("totalItem", routeService.countItem(employeeService.getEmployees(params, 0, 8)) / 8);
         return "employees";
     } 
 }
