@@ -197,14 +197,14 @@
                         <c:if test="${user.userrole=='Employee'||user.userrole=='Driver'}">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button type="button" class="btn btn-warning" onclick="showMess()">Thay đổi</button>
+                                    <button type="button" class="btn btn-warning" disabled="true">Thay đổi</button>
                                 </div>
                             </div>
                         </c:if>
                         <c:if test="${user.userrole=='Admin'}">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <a class="btn btn-warning" href="<c:url value="/admin/employees/list" />">Thay đổi</a>
+                                    <a class="btn btn-warning" href="<c:url value="/admin/employees/editemployee/${user.id}" />">Thay đổi</a>
                                 </div>
                             </div>
                         </c:if>
@@ -268,9 +268,6 @@
         const fileChoose = document.getElementById('firstimg');
         document.getElementById('display-image').setAttribute('value',
                 fileChoose.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1]);
-    }
-    function showMess() {
-        alert('Liên hệ ADMIN nếu bạn cần thay đổi thông tin');
     }
     function myFunction() {
         var x = document.getElementById("passwordN");
