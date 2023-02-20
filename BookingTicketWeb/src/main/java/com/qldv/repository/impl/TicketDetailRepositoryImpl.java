@@ -11,11 +11,9 @@ import com.qldv.pojo.Ticketdetail;
 import com.qldv.pojo.Trip;
 import com.qldv.pojo.User;
 import com.qldv.repository.PassengerRepository;
-import com.qldv.repository.RouteRepository;
 import com.qldv.repository.TicketDetailRepository;
 import com.qldv.repository.TripRepository;
 import com.qldv.repository.UserRepository;
-import com.qldv.utils.Utils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -266,6 +264,47 @@ public class TicketDetailRepositoryImpl implements TicketDetailRepository {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Ticketdetail> getTicketOfUser(int userId, Date date) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Ticketdetail> query = builder.createQuery(Ticketdetail.class);
+        Root rootU = query.from(User.class);
+        Root rootT = query.from(Ticketdetail.class);
+        List<Predicate> predicates = new ArrayList<>();
+        
+        predicates.add(builder.equal(rootU.get("id"), rootT.get("userId")));
+        predicates.add(builder.equal(rootT.get("userId"), userId));
+        predicates.add(builder.equal(rootT.get("active"), 1));
+        predicates.add(builder.greaterThanOrEqualTo(rootT.get("createddate"), date));
+        query.where(predicates.toArray(new Predicate[]{}));
+        query = query.select(rootT);
+        Query q = session.createQuery(query);
+        return q.getResultList();
+    }
+
+    @Override
+    public boolean cancelTicket(Ticketdetail cancel) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        try {
+            cancel.setActive(Boolean.FALSE);
+//            cancel.setCreateddate(new Date());
+            session.update(cancel);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Ticketdetail getTicketById(int id) {
+        Session session = this.sessionFactory.getObject().getCurrentSession();
+
+        return session.get(Ticketdetail.class, id);
     }
 
 }

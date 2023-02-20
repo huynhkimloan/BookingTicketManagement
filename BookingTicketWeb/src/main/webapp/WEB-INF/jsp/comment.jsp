@@ -29,7 +29,7 @@
 
                 <div style="display: flex; margin-top: 10px; ">
                     <h5><i class="fa-solid fa-hourglass-start"></i> Thời gian đi: <fmt:formatDate type = "time" value = "${trip.departuretime}" /> </h5>  
-                    <h5 style="margin-left: 100px;"><i class="fa-solid fa-hourglass-end"></i> Thời gian đến <fmt:formatDate type = "time" value = "${trip.arrivaltime}" /></h5>
+                    <h5 style="margin-left: 100px;"><i class="fa-solid fa-hourglass-end"></i> Thời gian đến: <fmt:formatDate type = "time" value = "${trip.arrivaltime}" /></h5>
                 </div>                    
             </div>
         </div>

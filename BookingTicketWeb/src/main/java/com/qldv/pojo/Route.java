@@ -80,7 +80,6 @@ public class Route implements Serializable {
     @Column(name = "stretch")
     private String stretch;
     @Column(name = "time")
-   
     private int time;
 //    @OneToMany(mappedBy = "routeId")
 //    private Set<Trip> tripSet;

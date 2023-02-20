@@ -5,16 +5,29 @@
  */
 package com.qldv.controllers;
 
+import com.qldv.pojo.Ticketdetail;
 import com.qldv.pojo.User;
+import com.qldv.service.TicketDetailService;
 import com.qldv.service.UserService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -25,6 +38,12 @@ public class UserController {
 
     @Autowired
     private UserService userDetailService;
+    
+     @Autowired
+    private TicketDetailService ticketDetailService;
+     
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/login")
     public String login() {
@@ -48,6 +67,9 @@ public class UserController {
             model.addAttribute("errMsg", errMsg);
         } else {
             if (this.userDetailService.addUser(user) == true) {
+                sendMail("1951052102loan@ou.edu.vn", "loan610.hk@gmail.com", "Dăng ký", "Ban da dang ky thanh vien Travel CK thanh cong"
+//                            + " voi ten dang nhap la: " + userRes.getUsername()
+                            + "\nNhanh tay chon cho minh mot tour du lich hap dan ngay nao!");
                 return "redirect:/login";
             } else {
                 errMsg = "Đã có lỗi xảy ra!";
@@ -57,5 +79,51 @@ public class UserController {
 
         return "register";
 
+    }
+    
+    @GetMapping("/info-ticket/{id}")
+    public String cancelTicket(Model model, @PathVariable(value = "id") int ticketId) {
+        model.addAttribute("cancel", this.ticketDetailService.getTicketById(ticketId));
+        return "cancel-ticket";
+    }
+    
+    @PostMapping("/info-ticket-confirm")
+    public String cancelTicket(Model model, @ModelAttribute(value="cancel") @Valid Ticketdetail cancel, 
+           
+            BindingResult result, Authentication a) throws ParseException{
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        User u = this.userDetailService.getUsers(a.getName()).get(0);
+        String errMsg ="";
+//         if(result.hasErrors())
+//            errMsg = "Vui lòng kiểm tra lại thông tin hủy vé!";
+//        else{
+//            Date d = (f.parse(params.getOrDefault("cd", null)));
+        
+            cancel.setUserId(u);
+            cancel.setCreateddate(new Date());
+//            String date = f.format(cancel.getCreateddate());
+//        try {
+//            cancel.setCreateddate(f.parse(date));
+//        } catch (ParseException ex) {
+//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+            if(this.ticketDetailService.cancelTicket(cancel) ==  true)
+                return "redirect:/info-ticket";
+            else
+                errMsg = "Đã có lỗi xảy ra, không hủy vé được!!!"; 
+//            }
+        model.addAttribute("errMsg", errMsg);
+        model.addAttribute("d", cancel.getCreateddate());
+        return "cancel-ticket";
+    }
+    
+    public void sendMail(String from, String to, String subject, String content){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(from);
+        mailMessage.setTo(to);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(content);
+        
+        mailSender.send(mailMessage);
     }
 }

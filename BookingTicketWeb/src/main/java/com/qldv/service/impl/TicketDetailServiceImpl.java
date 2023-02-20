@@ -9,6 +9,7 @@ import com.qldv.pojo.Seat;
 import com.qldv.pojo.Ticketdetail;
 import com.qldv.repository.TicketDetailRepository;
 import com.qldv.service.TicketDetailService;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,20 @@ public class TicketDetailServiceImpl implements TicketDetailService{
     @Override
     public boolean editTicket(Ticketdetail t) {
         return this.ticketDetailRepository.editTicket(t);
+    }
+
+    @Override
+    public List<Ticketdetail> getTicketOfUser(int id, Date date) {
+        return this.ticketDetailRepository.getTicketOfUser(id, date);
+    }
+
+    @Override
+    public boolean cancelTicket(Ticketdetail cancel) {
+        return this.ticketDetailRepository.cancelTicket(cancel);
+    }
+
+    @Override
+    public Ticketdetail getTicketById(int id) {
+        return this.ticketDetailRepository.getTicketById(id);
     }
 }

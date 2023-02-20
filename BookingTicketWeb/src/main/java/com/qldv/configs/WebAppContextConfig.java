@@ -5,6 +5,7 @@
 package com.qldv.configs;
 
 import com.qldv.formatters.DriverFormatter;
+import com.qldv.formatters.PassengerFormatter;
 import com.qldv.formatters.TripFormatter;
 import com.qldv.formatters.RouteFormatter;
 import com.qldv.formatters.UserFormatter;
@@ -61,11 +62,6 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         bean.setValidationMessageSource(messageSource());
         return bean;
     }
-
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addFormatter(new CategoryFormatter());
-//    }
     
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -73,6 +69,7 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         registry.addFormatter(new TripFormatter());
         registry.addFormatter(new UserFormatter());
         registry.addFormatter(new DriverFormatter());
+        registry.addFormatter(new PassengerFormatter());
     }
     
     @Bean

@@ -4,8 +4,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
-
-<div id="demo" class="carousel slide" data-bs-ride="carousel" style="padding-top:10px;">
+<div id="demo" class="carousel slide" data-bs-ride="carousel">
 
     <!-- Indicators/dots -->
     <div class="carousel-indicators">
@@ -17,7 +16,7 @@
     <!-- The slideshow/carousel -->
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="<c:url value="/img/a1.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
+            <img src="https://res.cloudinary.com/dvsqhstsi/image/upload/v1676619172/3_bbq0ou.jpg" alt="Tuyến 1" class="d-block w-100 " style="height: 400px;">
             <div class="carousel-caption">
                 <h1 style="padding-top: 100px; ">CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -25,7 +24,7 @@
         </div>
 
         <div class="carousel-item">
-            <img src="<c:url value="/img/a3.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
+            <img src="https://res.cloudinary.com/dvsqhstsi/image/upload/v1676619201/1_p51utj.jpg" alt="Tuyến 2" class="d-block w-100 " style="height: 400px;">
             <div class="carousel-caption">
                 <h1 style="padding-top: 100px; " >CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -33,7 +32,7 @@
         </div>
 
         <div class="carousel-item">
-            <img src="<c:url value="/img/a5.jpg"/>" alt="Los Angeles" class="d-block w-100 " style="height: 500px;">
+            <img src="https://res.cloudinary.com/dvsqhstsi/image/upload/v1676619232/2_tcygoc.jpg" alt="Tuyến 3" class="d-block w-100 " style="height: 400px;">
             <div class="carousel-caption">
                 <h1 style="padding-top:100px; ">CÁC TUYẾN ĐƯỜNG PHỔ BIẾN</h1>
                 <p>We will give you a great experience!!!</p>
@@ -49,14 +48,6 @@
         <span class="carousel-control-next-icon"></span>
     </button>
 </div>
-
-
-<!--Khi chỉ có admin mới hiện ra link này-->
-<sec:authorize access="hasRole('Admin')">
-    <div> 
-        <a href="<c:url value="/admin" />" class="btn btn-danger" >Quản lý đặt vé </a>
-    </div> 
-</sec:authorize>
 
 <form action="">
     <div class="row searchRoute">
@@ -113,9 +104,13 @@
         </ul>
     </div>
 </c:if>
+    
+    
+        
 <div class="row">
 
-    <c:forEach var="route" items="${routes}">        
+    <c:forEach var="route" items="${routes}"> 
+        
         <div class="col-md-4 col-xs-12" style="padding:10px;">
             <div class="card">
                 <img style=" height: 250px;" class=" img1 img-fluid card-header" src="<c:url value="${route.image}"/>" alt="${route.routename}" />                
@@ -135,6 +130,7 @@
                 </div>
             </div>
         </div>
+       
     </c:forEach>
 </div>
 

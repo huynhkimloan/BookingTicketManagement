@@ -31,8 +31,8 @@
     </head>
     <body>
         <i class="fas fa-arrow-alt-circle-up" onclick="topFunction()" id="myBtn"></i>
-        <div class="container">
             <tiles:insertAttribute name="header" />
+            <div class="container">
             <div class="container-fluid">
                 <div class="row flex-nowrap">
                     <tiles:insertAttribute name="menu" />

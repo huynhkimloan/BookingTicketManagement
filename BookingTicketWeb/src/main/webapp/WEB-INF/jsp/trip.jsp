@@ -94,7 +94,6 @@
                                                                                      onmouseover ="cRemain(${tripDepartureday.id})"/></p>
                     <p id="p-2" ><i class="fa-solid fa-bus-simple"></i> Loại: ${tripDepartureday.passengercarId.categoryId.categoryname}</p>
                 </div>
-                <div> </div>
 
                 <div id="trip-a" >                        
                     <c:if test="${pageContext.request.userPrincipal.name == null}">

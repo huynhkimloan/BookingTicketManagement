@@ -51,10 +51,10 @@ public class DriverDetailManageController {
 
     @GetMapping("/list")
     public String viewDriverList(ModelMap mm, Authentication a, HttpServletRequest request) {
-        mm.addAttribute("listDrivers", driverDetailService.getListNav(0, 8));
-        mm.addAttribute("totalItem", driverDetailService.totalItem() / 8);
         User u = this.userService.getUsers(a.getName()).get(0);
         request.getSession().setAttribute("user", u);
+        mm.addAttribute("listDrivers", driverDetailService.getListNav(0, 8));
+        mm.addAttribute("totalItem", driverDetailService.totalItem() / 8);
         return "driverdetails";
     }
 

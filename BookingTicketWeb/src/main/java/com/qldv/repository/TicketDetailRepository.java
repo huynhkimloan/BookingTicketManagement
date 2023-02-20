@@ -8,6 +8,7 @@ package com.qldv.repository;
 import com.qldv.pojo.Seat;
 import com.qldv.pojo.Ticketdetail;
 import com.qldv.pojo.User;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,4 +41,10 @@ public interface TicketDetailRepository {
     Long sumItem();
 
     int countTicketsByTripId(int tripId);
+    
+    List<Ticketdetail> getTicketOfUser(int userId, Date date);
+    
+    boolean cancelTicket(Ticketdetail cancel);
+    
+    Ticketdetail getTicketById(int id);
 }
